@@ -30,13 +30,13 @@
 		// 	// }, 30);
 		// });
 	});
-	onMount(async () => {
-		// 	console.log(`🚀 ~ file: index.svelte ~ line 18 ~ fq`, fq);
-		let dbQuotes = await getAllQuotesFromDB();
-		console.log(`🚀 ~ file: index.svelte ~ line 35 ~ onMount ~ dbQuotes`, dbQuotes);
-		quotesArray.set(dbQuotes.body.dgraph_quotes);
-		// console.log(`🚀 ~ file: index.svelte ~ line 36 ~ //onMount ~ $getAllQuotesFromDB`, $getAllQuotesFromDB)
-	});
+	// onMount(async () => {
+	// 	// 	console.log(`🚀 ~ file: index.svelte ~ line 18 ~ fq`, fq);
+	// 	let dbQuotes = await getAllQuotesFromDB();
+	// 	console.log(`🚀 ~ file: index.svelte ~ line 35 ~ onMount ~ dbQuotes`, dbQuotes);
+	// 	quotesArray.set(dbQuotes.body.dgraph_quotes);
+	// 	// console.log(`🚀 ~ file: index.svelte ~ line 36 ~ //onMount ~ $getAllQuotesFromDB`, $getAllQuotesFromDB)
+	// });
 
 	function uploadQuote(quote, operationType) {
 		console.log(
@@ -67,7 +67,7 @@
 </script>
 
 <div class="flex w-full h-full justify-start">
-	<div class="quotes">
+	<!-- <div class="quotes">
 		{#if quotes}
 			{#if quotes.length}
 				{#each quotes as quote, i}
@@ -77,7 +77,7 @@
 				loading index...
 			{/if}
 		{/if}
-	</div>
+	</div> -->
 
 	<ParseQuotes bind:filteredQuotes={fq}  />
 	<!-- <Quotes {quotes} /> -->

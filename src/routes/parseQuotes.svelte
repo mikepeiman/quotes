@@ -17,7 +17,7 @@
 		getAllQuotesFromDB
 	} from '$stores/quotes.js';
 	import { onMount } from 'svelte';
-	import DisplayQuotes from './DisplayQuotes.svelte'
+	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
 
 	import AddQuote from './AddQuote.svelte';
@@ -26,31 +26,40 @@
 		fsQuotesArray,
 		dbQuotes,
 		file = false;
-	$: if (fsFileContent) {
-		// parseFile(fsFileContent); // use this is you want the old behavior
-		if (fsQuotesArray) {
-			filteredQuotes = quotes = JSON.parse(fsQuotesArray);
-			// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 28 ~ quotes`, quotes);
-			if(quotes.length){
-
-				// quotes.forEach((quote) => {
-				// 	console.log(`🚀 ~ file: parseQuotes.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
-				// 	// setTimeout(() => {
-				// 	// 	uploadQuote(quote, "upsertQuote")
-				// 	// }, 100);
-				// });
-			}
-			storedQuotesArray.set(quotes);
-			filteredQuotes = [...$addedQuotes, ...$quotesArray];
-		} else {
+	$: if (fsQuotesArray) {
+		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
+		console.log(`🚀 ~ file: parseQuotes.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
+		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 28 ~ quotes`, quotes);
+		if (quotes.length) {
+			// quotes.forEach((quote) => {
+			// 	console.log(`🚀 ~ file: parseQuotes.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
+			// 	// setTimeout(() => {
+			// 	// 	uploadQuote(quote, "upsertQuote")
+			// 	// }, 100);
+			// });
+		}
+		storedQuotesArray.set(quotes);
+		filteredQuotes = [...$addedQuotes, ...$quotesArray];
+	} else {
+		if (fsFileContent) {
 			parseFile(fsFileContent);
+		} else {
+			// getQuotesFromDgraph()
+			if (dbQuotes) {
+				console.log(`🚀 ~ file: parseQuotes.svelte ~ line 48 ~ dbQuotes TRUE`, dbQuotes);
+				storedQuotesArray.set(dbQuotes.body.dgraph_quotes);
+				filteredQuotes = dbQuotes.body.dgraph_quotes;
+				console.log(
+					`🚀 ~ file: parseQuotes.svelte ~ line 52 ~ dbQuotes.body.dgraph_quotes`,
+					dbQuotes.body.dgraph_quotes
+				);
+			}
 		}
 	}
-	$: if (dbQuotes){
-        console.log(`🚀 ~ file: parseQuotes.svelte ~ line 50 ~ dbQuotes`, dbQuotes)
-		storedQuotesArray.set(dbQuotes.body.dgraph_quotes);
-		filteredQuotes = dbQuotes.body.dgraph_quotes
-        console.log(`🚀 ~ file: parseQuotes.svelte ~ line 52 ~ dbQuotes.body.dgraph_quotes`, dbQuotes.body.dgraph_quotes)
+
+	async function getQuotesFromDgraph() {
+		dbQuotes = await getAllQuotesFromDB();
+			quotesArray.set(dbQuotes.body.dgraph_quotes);
 	}
 
 	let addQuoteForm = false;
@@ -68,8 +77,10 @@
 		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 35 ~ addedQuotes`, $addedQuotes);
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
+            console.log(`🚀 ~ file: parseQuotes.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm)
 			filteredQuotes = quotes.filter((quote) =>
-				quote.originalText.toLowerCase().includes(searchTerm.toLowerCase())
+				quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
 			);
 			// quote.authorTitle !== null &&
 			// quote.authorTitle !== undefined &&
@@ -85,21 +96,25 @@
 		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 64 ~ onMount ~ fsFileContent`, fsFileContent);
 		fsQuotesArray = localStorage.getItem('quotesArray');
 
-		dbQuotes = await getAllQuotesFromDB();
-		quotesArray.set(dbQuotes.body.dgraph_quotes);
+		// dbQuotes = await getAllQuotesFromDB();
+		// quotesArray.set(dbQuotes.body.dgraph_quotes);
 		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });
 	});
 
-	
-    function uploadQuote(quote, operationType) {
-    console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 44 ~ uploadQuote ~ operationType ${operationType}, quote`, quote)
+	function uploadQuote(quote, operationType) {
+		console.log(
+			`🚀 ~ file: DisplayQuotes.svelte ~ line 44 ~ uploadQuote ~ operationType ${operationType}, quote`,
+			quote
+		);
 		const fire = async () => {
 			try {
 				// const res = await fetch(`/quotes.dgraph.getQuote.json?data=${JSON.stringify(id)}`);
-				const res = await fetch(`/quotes.dgraph.getQuote?data=${JSON.stringify(quote)}&queryType="${operationType}"`);
+				const res = await fetch(
+					`/quotes.dgraph.getQuote?data=${JSON.stringify(quote)}&queryType="${operationType}"`
+				);
 				console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 24 ~ fire ~ res`, res);
 				if (res.ok) {
 					const { dgraph_quotes } = await res.json();
@@ -175,11 +190,11 @@
 			// if (i === 145  || i === 146 ) {
 			// if (i === 26  ) {
 			// for (let i = 43; i < 57; i++) {
-				// look at 201, niemoller, with <br> at end
-				// look at 206 with the long context "oft quoted as"
-				// look at 262, @yeebingeebin
-				// check on 570, samurai carpenter, see if tags are corrected
-				// 620, tags knowledge management in paranethesis
+			// look at 201, niemoller, with <br> at end
+			// look at 206 with the long context "oft quoted as"
+			// look at 262, @yeebingeebin
+			// check on 570, samurai carpenter, see if tags are corrected
+			// 620, tags knowledge management in paranethesis
 			// for (let i = 16; i < 22; i++) {
 			// for (let i = 58; i < 71; i++) {
 			// 54-64 gives the meical journal quotes
@@ -192,7 +207,7 @@
 			workingQuoteObject['details'] = [];
 			workingQuoteObject['author'] = {
 				name: '',
-				title: '',
+				title: ''
 			};
 			workingQuoteObject['authorTitle'] = [];
 			workingQuoteObject['title'] = '';
@@ -270,7 +285,9 @@
 		const fire = async () => {
 			try {
 				// const res = await fetch(`/quotes.dgraph.getQuote.json?data=${JSON.stringify(id)}`);
-				const res = await fetch(`/quotes.dgraph.getQuote?data=${JSON.stringify(filteredQuotes)}?queryType="addManyQuotes"`);
+				const res = await fetch(
+					`/quotes.dgraph.getQuote?data=${JSON.stringify(filteredQuotes)}?queryType="addManyQuotes"`
+				);
 				console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 24 ~ fire ~ res`, res);
 				if (res.ok) {
 					const { dgraph_quotes } = await res.json();
@@ -332,7 +349,7 @@
 	<div class="quotes">
 		{#if filteredQuotes.length}
 			{#each filteredQuotes as quote, i}
-		<DisplayQuotes quote={quote} i={i} />
+				<DisplayQuotes {quote} {i} />
 			{/each}
 		{:else}
 			loading...
