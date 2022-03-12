@@ -1,0 +1,1 @@
+import{ax as t,ay as n,S as o,i as a,s as l}from"../../chunks/vendor-0f79dfe6.js";const i=t({size:50}),r=n(i);r.rectangle({width:12,height:12}).forEach(e=>{console.log("\u{1F680} ~ file: grid.svelte ~ line 14 ~ Grid.rectangle ~ hex",e)});class d extends o{constructor(s){super();a(this,s,null,null,l,{})}}export{d as default};

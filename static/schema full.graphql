@@ -1,0 +1,1122 @@
+#######################
+# Input Schema
+#######################
+
+type Quote {
+	id: ID!
+	quoteBody: String! @search(by: [fulltext])
+	author(filter: AuthorFilter): Author!
+	tags(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+	context: String
+	year: DateTime
+	source: String
+	tagsAggregate(filter: TagFilter): TagAggregateResult
+}
+
+type Author {
+	name: String! @search(by: [fulltext]) @id
+	titleShort: String
+	titleLong: String
+	born: DateTime
+	deceased: DateTime
+	credential: String
+	quotes(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	quotesAggregate(filter: QuoteFilter): QuoteAggregateResult
+}
+
+type Tag {
+	tag: String! @search(by: [fulltext])
+	quotes(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	quotesAggregate(filter: QuoteFilter): QuoteAggregateResult
+}
+
+type User {
+	username: String! @id
+	postedReviews(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review] @hasInverse(field: postedBy)
+	postedReviewsAggregate(filter: ReviewFilter): ReviewAggregateResult
+}
+
+type BookAuthor {
+	name: String! @id
+	description: String
+	books(filter: BookFilter, order: BookOrder, first: Int, offset: Int): [Book] @hasInverse(field: bookAuthor)
+	booksAggregate(filter: BookFilter): BookAggregateResult
+}
+
+type Review {
+	id: ID!
+	text: String!
+	rating: Int!
+	postedBy(filter: UserFilter): User! @hasInverse(field: postedReviews)
+	reviewedBook(filter: BookFilter): Book @hasInverse(field: reviews)
+}
+
+type Book {
+	id: ID!
+	name: String!
+	genre: String
+	bookAuthor(filter: BookAuthorFilter): BookAuthor! @hasInverse(field: books)
+	reviews(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review] @hasInverse(field: reviewedBook)
+	reviewsAggregate(filter: ReviewFilter): ReviewAggregateResult
+}
+
+type TodoAuthor {
+	name: String! @id
+	tasks(filter: TodoFilter, order: TodoOrder, first: Int, offset: Int): [Todo] @hasInverse(field: author)
+	tasksAggregate(filter: TodoFilter): TodoAggregateResult
+}
+
+type Todo {
+	id: ID!
+	body: String! @search(by: [fulltext])
+	created: DateTime!
+	completed: Boolean
+	author(filter: TodoAuthorFilter): TodoAuthor! @hasInverse(field: tasks)
+}
+
+#######################
+# Extended Definitions
+#######################
+
+"""
+The Int64 scalar type represents a signed 64‐bit numeric non‐fractional value.
+Int64 can represent values in range [-(2^63),(2^63 - 1)].
+"""
+scalar Int64
+
+"""
+The DateTime scalar type represents date and time as a string in RFC3339 format.
+For example: "1985-04-12T23:20:50.52Z" represents 20 minutes and 50.52 seconds after the 23rd hour of April 12th, 1985 in UTC.
+"""
+scalar DateTime
+
+input IntRange{
+	min: Int!
+	max: Int!
+}
+
+input FloatRange{
+	min: Float!
+	max: Float!
+}
+
+input Int64Range{
+	min: Int64!
+	max: Int64!
+}
+
+input DateTimeRange{
+	min: DateTime!
+	max: DateTime!
+}
+
+input StringRange{
+	min: String!
+	max: String!
+}
+
+enum DgraphIndex {
+	int
+	int64
+	float
+	bool
+	hash
+	exact
+	term
+	fulltext
+	trigram
+	regexp
+	year
+	month
+	day
+	hour
+	geo
+}
+
+input AuthRule {
+	and: [AuthRule]
+	or: [AuthRule]
+	not: AuthRule
+	rule: String
+}
+
+enum HTTPMethod {
+	GET
+	POST
+	PUT
+	PATCH
+	DELETE
+}
+
+enum Mode {
+	BATCH
+	SINGLE
+}
+
+input CustomHTTP {
+	url: String!
+	method: HTTPMethod!
+	body: String
+	graphql: String
+	mode: Mode
+	forwardHeaders: [String!]
+	secretHeaders: [String!]
+	introspectionHeaders: [String!]
+	skipIntrospection: Boolean
+}
+
+type Point {
+	longitude: Float!
+	latitude: Float!
+}
+
+input PointRef {
+	longitude: Float!
+	latitude: Float!
+}
+
+input NearFilter {
+	distance: Float!
+	coordinate: PointRef!
+}
+
+input PointGeoFilter {
+	near: NearFilter
+	within: WithinFilter
+}
+
+type PointList {
+	points: [Point!]!
+}
+
+input PointListRef {
+	points: [PointRef!]!
+}
+
+type Polygon {
+	coordinates: [PointList!]!
+}
+
+input PolygonRef {
+	coordinates: [PointListRef!]!
+}
+
+type MultiPolygon {
+	polygons: [Polygon!]!
+}
+
+input MultiPolygonRef {
+	polygons: [PolygonRef!]!
+}
+
+input WithinFilter {
+	polygon: PolygonRef!
+}
+
+input ContainsFilter {
+	point: PointRef
+	polygon: PolygonRef
+}
+
+input IntersectsFilter {
+	polygon: PolygonRef
+	multiPolygon: MultiPolygonRef
+}
+
+input PolygonGeoFilter {
+	near: NearFilter
+	within: WithinFilter
+	contains: ContainsFilter
+	intersects: IntersectsFilter
+}
+
+input GenerateQueryParams {
+	get: Boolean
+	query: Boolean
+	password: Boolean
+	aggregate: Boolean
+}
+
+input GenerateMutationParams {
+	add: Boolean
+	update: Boolean
+	delete: Boolean
+}
+
+directive @hasInverse(field: String!) on FIELD_DEFINITION
+directive @search(by: [DgraphIndex!]) on FIELD_DEFINITION
+directive @dgraph(type: String, pred: String) on OBJECT | INTERFACE | FIELD_DEFINITION
+directive @id on FIELD_DEFINITION
+directive @withSubscription on OBJECT | INTERFACE | FIELD_DEFINITION
+directive @secret(field: String!, pred: String) on OBJECT | INTERFACE
+directive @auth(
+	password: AuthRule
+	query: AuthRule,
+	add: AuthRule,
+	update: AuthRule,
+	delete: AuthRule) on OBJECT | INTERFACE
+directive @custom(http: CustomHTTP, dql: String) on FIELD_DEFINITION
+directive @remote on OBJECT | INTERFACE | UNION | INPUT_OBJECT | ENUM
+directive @remoteResponse(name: String) on FIELD_DEFINITION
+directive @cascade(fields: [String]) on FIELD
+directive @lambda on FIELD_DEFINITION
+directive @lambdaOnMutate(add: Boolean, update: Boolean, delete: Boolean) on OBJECT | INTERFACE
+directive @cacheControl(maxAge: Int!) on QUERY
+directive @generate(
+	query: GenerateQueryParams,
+	mutation: GenerateMutationParams,
+	subscription: Boolean) on OBJECT | INTERFACE
+
+input IntFilter {
+	eq: Int
+	in: [Int]
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: IntRange
+}
+
+input Int64Filter {
+	eq: Int64
+	in: [Int64]
+	le: Int64
+	lt: Int64
+	ge: Int64
+	gt: Int64
+	between: Int64Range
+}
+
+input FloatFilter {
+	eq: Float
+	in: [Float]
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: FloatRange
+}
+
+input DateTimeFilter {
+	eq: DateTime
+	in: [DateTime]
+	le: DateTime
+	lt: DateTime
+	ge: DateTime
+	gt: DateTime
+	between: DateTimeRange
+}
+
+input StringTermFilter {
+	allofterms: String
+	anyofterms: String
+}
+
+input StringRegExpFilter {
+	regexp: String
+}
+
+input StringFullTextFilter {
+	alloftext: String
+	anyoftext: String
+}
+
+input StringExactFilter {
+	eq: String
+	in: [String]
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	between: StringRange
+}
+
+input StringHashFilter {
+	eq: String
+	in: [String]
+}
+
+#######################
+# Generated Types
+#######################
+
+type AddAuthorPayload {
+	author(filter: AuthorFilter, order: AuthorOrder, first: Int, offset: Int): [Author]
+	numUids: Int
+}
+
+type AddBookAuthorPayload {
+	bookAuthor(filter: BookAuthorFilter, order: BookAuthorOrder, first: Int, offset: Int): [BookAuthor]
+	numUids: Int
+}
+
+type AddBookPayload {
+	book(filter: BookFilter, order: BookOrder, first: Int, offset: Int): [Book]
+	numUids: Int
+}
+
+type AddQuotePayload {
+	quote(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	numUids: Int
+}
+
+type AddReviewPayload {
+	review(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review]
+	numUids: Int
+}
+
+type AddTagPayload {
+	tag(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+	numUids: Int
+}
+
+type AddTodoAuthorPayload {
+	todoAuthor(filter: TodoAuthorFilter, order: TodoAuthorOrder, first: Int, offset: Int): [TodoAuthor]
+	numUids: Int
+}
+
+type AddTodoPayload {
+	todo(filter: TodoFilter, order: TodoOrder, first: Int, offset: Int): [Todo]
+	numUids: Int
+}
+
+type AddUserPayload {
+	user(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+	numUids: Int
+}
+
+type AuthorAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	titleShortMin: String
+	titleShortMax: String
+	titleLongMin: String
+	titleLongMax: String
+	bornMin: DateTime
+	bornMax: DateTime
+	deceasedMin: DateTime
+	deceasedMax: DateTime
+	credentialMin: String
+	credentialMax: String
+}
+
+type BookAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	genreMin: String
+	genreMax: String
+}
+
+type BookAuthorAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+	descriptionMin: String
+	descriptionMax: String
+}
+
+type DeleteAuthorPayload {
+	author(filter: AuthorFilter, order: AuthorOrder, first: Int, offset: Int): [Author]
+	msg: String
+	numUids: Int
+}
+
+type DeleteBookAuthorPayload {
+	bookAuthor(filter: BookAuthorFilter, order: BookAuthorOrder, first: Int, offset: Int): [BookAuthor]
+	msg: String
+	numUids: Int
+}
+
+type DeleteBookPayload {
+	book(filter: BookFilter, order: BookOrder, first: Int, offset: Int): [Book]
+	msg: String
+	numUids: Int
+}
+
+type DeleteQuotePayload {
+	quote(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	msg: String
+	numUids: Int
+}
+
+type DeleteReviewPayload {
+	review(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review]
+	msg: String
+	numUids: Int
+}
+
+type DeleteTagPayload {
+	tag(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+	msg: String
+	numUids: Int
+}
+
+type DeleteTodoAuthorPayload {
+	todoAuthor(filter: TodoAuthorFilter, order: TodoAuthorOrder, first: Int, offset: Int): [TodoAuthor]
+	msg: String
+	numUids: Int
+}
+
+type DeleteTodoPayload {
+	todo(filter: TodoFilter, order: TodoOrder, first: Int, offset: Int): [Todo]
+	msg: String
+	numUids: Int
+}
+
+type DeleteUserPayload {
+	user(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+	msg: String
+	numUids: Int
+}
+
+type QuoteAggregateResult {
+	count: Int
+	quoteBodyMin: String
+	quoteBodyMax: String
+	contextMin: String
+	contextMax: String
+	yearMin: DateTime
+	yearMax: DateTime
+	sourceMin: String
+	sourceMax: String
+}
+
+type ReviewAggregateResult {
+	count: Int
+	textMin: String
+	textMax: String
+	ratingMin: Int
+	ratingMax: Int
+	ratingSum: Int
+	ratingAvg: Float
+}
+
+type TagAggregateResult {
+	count: Int
+	tagMin: String
+	tagMax: String
+}
+
+type TodoAggregateResult {
+	count: Int
+	bodyMin: String
+	bodyMax: String
+	createdMin: DateTime
+	createdMax: DateTime
+}
+
+type TodoAuthorAggregateResult {
+	count: Int
+	nameMin: String
+	nameMax: String
+}
+
+type UpdateAuthorPayload {
+	author(filter: AuthorFilter, order: AuthorOrder, first: Int, offset: Int): [Author]
+	numUids: Int
+}
+
+type UpdateBookAuthorPayload {
+	bookAuthor(filter: BookAuthorFilter, order: BookAuthorOrder, first: Int, offset: Int): [BookAuthor]
+	numUids: Int
+}
+
+type UpdateBookPayload {
+	book(filter: BookFilter, order: BookOrder, first: Int, offset: Int): [Book]
+	numUids: Int
+}
+
+type UpdateQuotePayload {
+	quote(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	numUids: Int
+}
+
+type UpdateReviewPayload {
+	review(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review]
+	numUids: Int
+}
+
+type UpdateTagPayload {
+	tag(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+	numUids: Int
+}
+
+type UpdateTodoAuthorPayload {
+	todoAuthor(filter: TodoAuthorFilter, order: TodoAuthorOrder, first: Int, offset: Int): [TodoAuthor]
+	numUids: Int
+}
+
+type UpdateTodoPayload {
+	todo(filter: TodoFilter, order: TodoOrder, first: Int, offset: Int): [Todo]
+	numUids: Int
+}
+
+type UpdateUserPayload {
+	user(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+	numUids: Int
+}
+
+type UserAggregateResult {
+	count: Int
+	usernameMin: String
+	usernameMax: String
+}
+
+#######################
+# Generated Enums
+#######################
+
+enum AuthorHasFilter {
+	name
+	titleShort
+	titleLong
+	born
+	deceased
+	credential
+	quotes
+}
+
+enum AuthorOrderable {
+	name
+	titleShort
+	titleLong
+	born
+	deceased
+	credential
+}
+
+enum BookAuthorHasFilter {
+	name
+	description
+	books
+}
+
+enum BookAuthorOrderable {
+	name
+	description
+}
+
+enum BookHasFilter {
+	name
+	genre
+	bookAuthor
+	reviews
+}
+
+enum BookOrderable {
+	name
+	genre
+}
+
+enum QuoteHasFilter {
+	quoteBody
+	author
+	tags
+	context
+	year
+	source
+}
+
+enum QuoteOrderable {
+	quoteBody
+	context
+	year
+	source
+}
+
+enum ReviewHasFilter {
+	text
+	rating
+	postedBy
+	reviewedBook
+}
+
+enum ReviewOrderable {
+	text
+	rating
+}
+
+enum TagHasFilter {
+	tag
+	quotes
+}
+
+enum TagOrderable {
+	tag
+}
+
+enum TodoAuthorHasFilter {
+	name
+	tasks
+}
+
+enum TodoAuthorOrderable {
+	name
+}
+
+enum TodoHasFilter {
+	body
+	created
+	completed
+	author
+}
+
+enum TodoOrderable {
+	body
+	created
+}
+
+enum UserHasFilter {
+	username
+	postedReviews
+}
+
+enum UserOrderable {
+	username
+}
+
+#######################
+# Generated Inputs
+#######################
+
+input AddAuthorInput {
+	name: String!
+	titleShort: String
+	titleLong: String
+	born: DateTime
+	deceased: DateTime
+	credential: String
+	quotes: [QuoteRef]
+}
+
+input AddBookAuthorInput {
+	name: String!
+	description: String
+	books: [BookRef]
+}
+
+input AddBookInput {
+	name: String!
+	genre: String
+	bookAuthor: BookAuthorRef!
+	reviews: [ReviewRef]
+}
+
+input AddQuoteInput {
+	quoteBody: String!
+	author: AuthorRef!
+	tags: [TagRef]
+	context: String
+	year: DateTime
+	source: String
+}
+
+input AddReviewInput {
+	text: String!
+	rating: Int!
+	postedBy: UserRef!
+	reviewedBook: BookRef
+}
+
+input AddTagInput {
+	tag: String!
+	quotes: [QuoteRef]
+}
+
+input AddTodoAuthorInput {
+	name: String!
+	tasks: [TodoRef]
+}
+
+input AddTodoInput {
+	body: String!
+	created: DateTime!
+	completed: Boolean
+	author: TodoAuthorRef!
+}
+
+input AddUserInput {
+	username: String!
+	postedReviews: [ReviewRef]
+}
+
+input AuthorFilter {
+	name: StringFullTextFilter_StringHashFilter
+	has: [AuthorHasFilter]
+	and: [AuthorFilter]
+	or: [AuthorFilter]
+	not: AuthorFilter
+}
+
+input AuthorOrder {
+	asc: AuthorOrderable
+	desc: AuthorOrderable
+	then: AuthorOrder
+}
+
+input AuthorPatch {
+	titleShort: String
+	titleLong: String
+	born: DateTime
+	deceased: DateTime
+	credential: String
+	quotes: [QuoteRef]
+}
+
+input AuthorRef {
+	name: String
+	titleShort: String
+	titleLong: String
+	born: DateTime
+	deceased: DateTime
+	credential: String
+	quotes: [QuoteRef]
+}
+
+input BookAuthorFilter {
+	name: StringHashFilter
+	has: [BookAuthorHasFilter]
+	and: [BookAuthorFilter]
+	or: [BookAuthorFilter]
+	not: BookAuthorFilter
+}
+
+input BookAuthorOrder {
+	asc: BookAuthorOrderable
+	desc: BookAuthorOrderable
+	then: BookAuthorOrder
+}
+
+input BookAuthorPatch {
+	description: String
+	books: [BookRef]
+}
+
+input BookAuthorRef {
+	name: String
+	description: String
+	books: [BookRef]
+}
+
+input BookFilter {
+	id: [ID!]
+	has: [BookHasFilter]
+	and: [BookFilter]
+	or: [BookFilter]
+	not: BookFilter
+}
+
+input BookOrder {
+	asc: BookOrderable
+	desc: BookOrderable
+	then: BookOrder
+}
+
+input BookPatch {
+	name: String
+	genre: String
+	bookAuthor: BookAuthorRef
+	reviews: [ReviewRef]
+}
+
+input BookRef {
+	id: ID
+	name: String
+	genre: String
+	bookAuthor: BookAuthorRef
+	reviews: [ReviewRef]
+}
+
+input QuoteFilter {
+	id: [ID!]
+	quoteBody: StringFullTextFilter
+	has: [QuoteHasFilter]
+	and: [QuoteFilter]
+	or: [QuoteFilter]
+	not: QuoteFilter
+}
+
+input QuoteOrder {
+	asc: QuoteOrderable
+	desc: QuoteOrderable
+	then: QuoteOrder
+}
+
+input QuotePatch {
+	quoteBody: String
+	author: AuthorRef
+	tags: [TagRef]
+	context: String
+	year: DateTime
+	source: String
+}
+
+input QuoteRef {
+	id: ID
+	quoteBody: String
+	author: AuthorRef
+	tags: [TagRef]
+	context: String
+	year: DateTime
+	source: String
+}
+
+input ReviewFilter {
+	id: [ID!]
+	has: [ReviewHasFilter]
+	and: [ReviewFilter]
+	or: [ReviewFilter]
+	not: ReviewFilter
+}
+
+input ReviewOrder {
+	asc: ReviewOrderable
+	desc: ReviewOrderable
+	then: ReviewOrder
+}
+
+input ReviewPatch {
+	text: String
+	rating: Int
+	postedBy: UserRef
+	reviewedBook: BookRef
+}
+
+input ReviewRef {
+	id: ID
+	text: String
+	rating: Int
+	postedBy: UserRef
+	reviewedBook: BookRef
+}
+
+input StringFullTextFilter_StringHashFilter {
+	alloftext: String
+	anyoftext: String
+	eq: String
+	in: [String]
+}
+
+input TagFilter {
+	tag: StringFullTextFilter
+	has: [TagHasFilter]
+	and: [TagFilter]
+	or: [TagFilter]
+	not: TagFilter
+}
+
+input TagOrder {
+	asc: TagOrderable
+	desc: TagOrderable
+	then: TagOrder
+}
+
+input TagPatch {
+	tag: String
+	quotes: [QuoteRef]
+}
+
+input TagRef {
+	tag: String
+	quotes: [QuoteRef]
+}
+
+input TodoAuthorFilter {
+	name: StringHashFilter
+	has: [TodoAuthorHasFilter]
+	and: [TodoAuthorFilter]
+	or: [TodoAuthorFilter]
+	not: TodoAuthorFilter
+}
+
+input TodoAuthorOrder {
+	asc: TodoAuthorOrderable
+	desc: TodoAuthorOrderable
+	then: TodoAuthorOrder
+}
+
+input TodoAuthorPatch {
+	tasks: [TodoRef]
+}
+
+input TodoAuthorRef {
+	name: String
+	tasks: [TodoRef]
+}
+
+input TodoFilter {
+	id: [ID!]
+	body: StringFullTextFilter
+	has: [TodoHasFilter]
+	and: [TodoFilter]
+	or: [TodoFilter]
+	not: TodoFilter
+}
+
+input TodoOrder {
+	asc: TodoOrderable
+	desc: TodoOrderable
+	then: TodoOrder
+}
+
+input TodoPatch {
+	body: String
+	created: DateTime
+	completed: Boolean
+	author: TodoAuthorRef
+}
+
+input TodoRef {
+	id: ID
+	body: String
+	created: DateTime
+	completed: Boolean
+	author: TodoAuthorRef
+}
+
+input UpdateAuthorInput {
+	filter: AuthorFilter!
+	set: AuthorPatch
+	remove: AuthorPatch
+}
+
+input UpdateBookAuthorInput {
+	filter: BookAuthorFilter!
+	set: BookAuthorPatch
+	remove: BookAuthorPatch
+}
+
+input UpdateBookInput {
+	filter: BookFilter!
+	set: BookPatch
+	remove: BookPatch
+}
+
+input UpdateQuoteInput {
+	filter: QuoteFilter!
+	set: QuotePatch
+	remove: QuotePatch
+}
+
+input UpdateReviewInput {
+	filter: ReviewFilter!
+	set: ReviewPatch
+	remove: ReviewPatch
+}
+
+input UpdateTagInput {
+	filter: TagFilter!
+	set: TagPatch
+	remove: TagPatch
+}
+
+input UpdateTodoAuthorInput {
+	filter: TodoAuthorFilter!
+	set: TodoAuthorPatch
+	remove: TodoAuthorPatch
+}
+
+input UpdateTodoInput {
+	filter: TodoFilter!
+	set: TodoPatch
+	remove: TodoPatch
+}
+
+input UpdateUserInput {
+	filter: UserFilter!
+	set: UserPatch
+	remove: UserPatch
+}
+
+input UserFilter {
+	username: StringHashFilter
+	has: [UserHasFilter]
+	and: [UserFilter]
+	or: [UserFilter]
+	not: UserFilter
+}
+
+input UserOrder {
+	asc: UserOrderable
+	desc: UserOrderable
+	then: UserOrder
+}
+
+input UserPatch {
+	postedReviews: [ReviewRef]
+}
+
+input UserRef {
+	username: String
+	postedReviews: [ReviewRef]
+}
+
+#######################
+# Generated Query
+#######################
+
+type Query {
+	getQuote(id: ID!): Quote
+	queryQuote(filter: QuoteFilter, order: QuoteOrder, first: Int, offset: Int): [Quote]
+	aggregateQuote(filter: QuoteFilter): QuoteAggregateResult
+	getAuthor(name: String!): Author
+	queryAuthor(filter: AuthorFilter, order: AuthorOrder, first: Int, offset: Int): [Author]
+	aggregateAuthor(filter: AuthorFilter): AuthorAggregateResult
+	queryTag(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+	aggregateTag(filter: TagFilter): TagAggregateResult
+	getUser(username: String!): User
+	queryUser(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+	aggregateUser(filter: UserFilter): UserAggregateResult
+	getBookAuthor(name: String!): BookAuthor
+	queryBookAuthor(filter: BookAuthorFilter, order: BookAuthorOrder, first: Int, offset: Int): [BookAuthor]
+	aggregateBookAuthor(filter: BookAuthorFilter): BookAuthorAggregateResult
+	getReview(id: ID!): Review
+	queryReview(filter: ReviewFilter, order: ReviewOrder, first: Int, offset: Int): [Review]
+	aggregateReview(filter: ReviewFilter): ReviewAggregateResult
+	getBook(id: ID!): Book
+	queryBook(filter: BookFilter, order: BookOrder, first: Int, offset: Int): [Book]
+	aggregateBook(filter: BookFilter): BookAggregateResult
+	getTodoAuthor(name: String!): TodoAuthor
+	queryTodoAuthor(filter: TodoAuthorFilter, order: TodoAuthorOrder, first: Int, offset: Int): [TodoAuthor]
+	aggregateTodoAuthor(filter: TodoAuthorFilter): TodoAuthorAggregateResult
+	getTodo(id: ID!): Todo
+	queryTodo(filter: TodoFilter, order: TodoOrder, first: Int, offset: Int): [Todo]
+	aggregateTodo(filter: TodoFilter): TodoAggregateResult
+}
+
+#######################
+# Generated Mutations
+#######################
+
+type Mutation {
+	addQuote(input: [AddQuoteInput!]!): AddQuotePayload
+	updateQuote(input: UpdateQuoteInput!): UpdateQuotePayload
+	deleteQuote(filter: QuoteFilter!): DeleteQuotePayload
+	addAuthor(input: [AddAuthorInput!]!, upsert: Boolean): AddAuthorPayload
+	updateAuthor(input: UpdateAuthorInput!): UpdateAuthorPayload
+	deleteAuthor(filter: AuthorFilter!): DeleteAuthorPayload
+	addTag(input: [AddTagInput!]!): AddTagPayload
+	updateTag(input: UpdateTagInput!): UpdateTagPayload
+	deleteTag(filter: TagFilter!): DeleteTagPayload
+	addUser(input: [AddUserInput!]!, upsert: Boolean): AddUserPayload
+	updateUser(input: UpdateUserInput!): UpdateUserPayload
+	deleteUser(filter: UserFilter!): DeleteUserPayload
+	addBookAuthor(input: [AddBookAuthorInput!]!, upsert: Boolean): AddBookAuthorPayload
+	updateBookAuthor(input: UpdateBookAuthorInput!): UpdateBookAuthorPayload
+	deleteBookAuthor(filter: BookAuthorFilter!): DeleteBookAuthorPayload
+	addReview(input: [AddReviewInput!]!): AddReviewPayload
+	updateReview(input: UpdateReviewInput!): UpdateReviewPayload
+	deleteReview(filter: ReviewFilter!): DeleteReviewPayload
+	addBook(input: [AddBookInput!]!): AddBookPayload
+	updateBook(input: UpdateBookInput!): UpdateBookPayload
+	deleteBook(filter: BookFilter!): DeleteBookPayload
+	addTodoAuthor(input: [AddTodoAuthorInput!]!, upsert: Boolean): AddTodoAuthorPayload
+	updateTodoAuthor(input: UpdateTodoAuthorInput!): UpdateTodoAuthorPayload
+	deleteTodoAuthor(filter: TodoAuthorFilter!): DeleteTodoAuthorPayload
+	addTodo(input: [AddTodoInput!]!): AddTodoPayload
+	updateTodo(input: UpdateTodoInput!): UpdateTodoPayload
+	deleteTodo(filter: TodoFilter!): DeleteTodoPayload
+}
+

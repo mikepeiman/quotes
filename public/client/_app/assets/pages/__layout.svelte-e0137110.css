@@ -1,0 +1,1 @@
+#svelte{min-height:100vh}#app-layout{grid-template-rows:auto 80px;grid-template-columns:auto;grid-template-areas:" layout-main " " footer "}.layout-main{grid-area:layout-main}html{max-width:100vw;width:100%}body{margin:0;height:90%}

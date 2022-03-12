@@ -1,0 +1,83 @@
+type Quote {
+  id: ID
+  quoteBody: String! @search(by: [fulltext])
+  originalText: String! @search(by: [fulltext])
+  author: Author
+  tags: [Tag] @hasInverse(field:quotes)
+  context: String
+  date: DateTime
+  source: String
+}
+
+type Tag {
+  id: ID
+  name: String! @search(by: [fulltext])
+  quotes: [Quote] @hasInverse(field:tags)
+}
+
+type Author {
+  id: ID
+  name: String! @search(by: [fulltext])
+  quotes: [Quote] @hasInverse(field:author)
+  yearBorn: DateTime
+  yearDied: DateTime
+  title: String @search(by: [fulltext])
+}
+
+...
+
+{
+ queryQuote {
+ 	author {
+ 			name
+      id
+ 	}
+  tags {
+  	 id
+     name
+    }
+ }
+}
+
+mutation MyMutation {
+  deleteQuote(filter: {}) {
+    msg
+    numUids
+  }
+}
+
+...
+mutation UpsertQuote($quote: [AddQuoteInput!]!) {
+  addQuote(input: $quote, upsert: true) {
+    quote {
+      id
+      quoteBody
+      originalText
+      author {
+        name
+        title
+      }
+      tags {
+        name
+      }
+      source
+    }
+  }
+}
+
+
+{
+  "quote": {
+    "quoteBody": "Life is a dream, and the journey of mastery is about waking up.",
+    "originalText": "Life is a dream...",
+    "author": {
+      "name": "Michael Peiman",
+      "title": "Single father seeker of truth and wisdom"
+    },
+    "tags": {
+      "name": "second tag",
+      "name": "wisdom"
+    },
+    "source": "my introspective mind"
+  }
+}
