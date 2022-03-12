@@ -26,13 +26,15 @@ const getAuthor = (workingQuoteObject) => {
         }
         console.log(`🚀 ~ file: getAuthor.js ~ line 19 ~ getAuthor ~ authorafter regex split`, author)
         author = author.trim()
-        author.replace(/\s{2,}/g, ' ');
+        author = author.replace(/\s{2,}/g, ' ');
+        author = author.replace("<br>", '');
         // author = remainingText = remainingText.split("-")[1]
         console.log(`🚀 ~ file: getAuthor.js ~ line 14 ~ getAuthor ~ author`, author)
     }
     if (!author && !remainingText) {
         author = remainingText = workingQuoteObject.details[0]?.value
-        author.replace(/\s{2,}/g, ' ');
+        author = author.replace(/\s{2,}/g, ' ');
+        author = author.replace("<br>", '');
     }
     let separator = findNextSeparatingCharacter(remainingText);
     console.log(`🚀 ~ file: getAuthor.js ~ line 19 ~ getAuthor ~ separator`, separator)
@@ -47,7 +49,8 @@ const getAuthor = (workingQuoteObject) => {
         console.log(`🚀 ~ file: getAuthor.js ~ line 19 ~ getAuthor ~ i1, i2, separator`, i1, i2, separator)
 
         author = Array.from(author).splice(0, separator.value).join(String()).trim();
-        author.replace(/\s{2,}/g, ' ');
+        author = author.replace(/\s{2,}/g, ' ');
+        author = author.replace("<br>", '');
         console.log(`🚀 ~ file: getAuthor.js ~ line 16 ~ getAuthor ~ author`, author)
 
         // author = Array.from(remainingText).splice(separator.value + 2, textEnd).join(String()).trim();
@@ -64,7 +67,9 @@ const getAuthor = (workingQuoteObject) => {
         console.log('parse.js line:45 separator', separator);
         // author = authorContainsDash(workingQuoteObject['remainingText'])
         // author = authorContainsDash(remainingText)
-        workingQuoteObject['author']['name'] = author.replace(/\s{2,}/g, ' ');
+        author = author.replace(/\s{2,}/g, ' ');
+        author = author.replace("<br>", '');
+        workingQuoteObject['author']['name'] = author
         workingQuoteObject['remainingText'] = false
         workingQuoteObject['parsingComplete'] = true
     }

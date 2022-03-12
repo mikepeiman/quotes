@@ -9,11 +9,11 @@
 </script>
 
 <script>
-	import ParseQuotes from "./parseQuotes.svelte";
+	import QuotesManager from "./QuotesManager.svelte";
 	export let file
 </script>
 
-<ParseQuotes />
+<QuotesManager />
 <div class="todos">
 	<!-- <Todos {todos}/> -->
 </div>

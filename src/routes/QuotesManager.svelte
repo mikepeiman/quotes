@@ -28,11 +28,11 @@
 		file = false;
 	$: if (fsQuotesArray) {
 		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
-		console.log(`🚀 ~ file: parseQuotes.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
-		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 28 ~ quotes`, quotes);
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
+		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 28 ~ quotes`, quotes);
 		if (quotes.length) {
 			// quotes.forEach((quote) => {
-			// 	console.log(`🚀 ~ file: parseQuotes.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
+			// 	console.log(`🚀 ~ file: QuotesManager.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
 			// 	// setTimeout(() => {
 			// 	// 	uploadQuote(quote, "upsertQuote")
 			// 	// }, 100);
@@ -46,11 +46,11 @@
 		} else {
 			// getQuotesFromDgraph()
 			if (dbQuotes) {
-				console.log(`🚀 ~ file: parseQuotes.svelte ~ line 48 ~ dbQuotes TRUE`, dbQuotes);
+				console.log(`🚀 ~ file: QuotesManager.svelte ~ line 48 ~ dbQuotes TRUE`, dbQuotes);
 				storedQuotesArray.set(dbQuotes.body.dgraph_quotes);
 				filteredQuotes = dbQuotes.body.dgraph_quotes;
 				console.log(
-					`🚀 ~ file: parseQuotes.svelte ~ line 52 ~ dbQuotes.body.dgraph_quotes`,
+					`🚀 ~ file: QuotesManager.svelte ~ line 52 ~ dbQuotes.body.dgraph_quotes`,
 					dbQuotes.body.dgraph_quotes
 				);
 			}
@@ -74,10 +74,10 @@
 	let quotesObjects = [];
 	let filteredQuotesObjects = [];
 	$: {
-		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 35 ~ addedQuotes`, $addedQuotes);
+		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 35 ~ addedQuotes`, $addedQuotes);
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
-            console.log(`🚀 ~ file: parseQuotes.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm)
+            console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm)
 			filteredQuotes = quotes.filter((quote) =>
 				quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -93,12 +93,12 @@
 	}
 	onMount(async () => {
 		fsFileContent = localStorage.getItem('fileContent');
-		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 64 ~ onMount ~ fsFileContent`, fsFileContent);
+		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 64 ~ onMount ~ fsFileContent`, fsFileContent);
 		fsQuotesArray = localStorage.getItem('quotesArray');
 
 		// dbQuotes = await getAllQuotesFromDB();
 		// quotesArray.set(dbQuotes.body.dgraph_quotes);
-		// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
+		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });
@@ -133,7 +133,7 @@
 
 	function readFile(input_file) {
 		if (input_file) {
-			console.log(`🚀 ~ file: parseQuotes.svelte ~ line 14 ~ readFile ~ input_file`, input_file[0]);
+			console.log(`🚀 ~ file: QuotesManager.svelte ~ line 14 ~ readFile ~ input_file`, input_file[0]);
 			file = input_file[0];
 			var reader = new FileReader();
 			reader.onload = function (event) {
@@ -151,13 +151,13 @@
 
 	function reParseFile(input_file) {
 		console.log(
-			`🚀 ~ file: parseQuotes.svelte ~ line 87 ~ reParseFile ~ reParseFile, input_file`,
+			`🚀 ~ file: QuotesManager.svelte ~ line 87 ~ reParseFile ~ reParseFile, input_file`,
 			input_file
 		);
 		localStorage.setItem('quotesArray', []);
 		if (input_file) {
 			console.log(
-				`🚀 ~ file: parseQuotes.svelte ~ line 14 ~ reParseFile ~ input_file`,
+				`🚀 ~ file: QuotesManager.svelte ~ line 14 ~ reParseFile ~ input_file`,
 				input_file[0]
 			);
 			file = input_file[0];
@@ -181,7 +181,7 @@
 		let divs = htmlDoc.getElementsByTagName('div');
 		quotesArrays = isolateQuotationBlocks(divs);
 		// console.log(
-		// 	`🚀 ~ file: parseQuotes.svelte ~ line 66 ~ parseFile ~ quotesArrays`,
+		// 	`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ parseFile ~ quotesArrays`,
 		// 	quotesArrays.length,
 		// 	quotesArrays
 		// );
@@ -213,7 +213,7 @@
 			workingQuoteObject['title'] = '';
 			workingQuoteObject['tags'] = [];
 			workingQuoteObject['sources'] = [];
-			// console.log(`🚀 ~ file: parseQuotes.svelte ~ line 77 ~ parseFile ~ workingQuoteObject`, workingQuoteObject)
+			// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 77 ~ parseFile ~ workingQuoteObject`, workingQuoteObject)
 			workingQuoteObject = parse(workingQuoteObject);
 			// workingQuoteObject['details'] = [];
 			// workingQuoteObject['startingItem'] = item;

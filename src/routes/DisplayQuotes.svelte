@@ -111,12 +111,12 @@
 			</div>
 		</div>
 	</div>
-	<label class="input-group input-group-xs rounded-none">
+	<!-- <label class="input-group input-group-xs rounded-none">
 		<span class="bg-slate-900 rounded-none">Original</span>
 		<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
 			>{quote.originalText}</span
 		>
-	</label>
+	</label> -->
 	<h1 class="quote-body p-8 text-2xl">
 		<span class="quote-mark text-sky-300">&ldquo;</span>{@html quote.quoteBody}<span
 			class="quote-mark text-sky-300">&rdquo;</span
@@ -203,3 +203,22 @@
     {/if} -->
 	</div>
 </div>
+
+<style lang="scss">
+	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
+
+	// font-family: 'Allura', cursive;
+	// font-family: 'Bad Script', cursive;
+	// font-family: 'Coda', cursive;
+	// font-family: 'Dancing Script', cursive;
+	// font-family: 'Forum', cursive;
+	// font-family: 'Gideon Roman', cursive;
+	// font-family: 'Great Vibes', cursive;
+	// font-family: 'Karla', sans-serif;
+	// font-family: 'Lemonada', cursive;
+	// font-family: 'Merriweather', serif;
+	// font-family: 'Montserrat', sans-serif;
+	// font-family: 'Outfit', sans-serif;
+	// font-family: 'Overlock', cursive;
+	// font-family: 'Staatliches', cursive;
+</style>

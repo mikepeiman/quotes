@@ -1,21 +1,7 @@
-<script context="module">
-	// export const load = async ({ fetch }) => {
-	// 	const res = await fetch('/quotes.json');
-	// 	if (res.ok) {
-	// 		const { quotes } = await res.json();
-	// 		console.log(`🚀 ~ file: index.svelte ~ line 6 ~ load ~ quotes`, quotes);
-	// 		return { props: { quotes } };
-	// 	}
-	// };
-</script>
-
 <script>
 	import { quotesArray, getAllQuotesFromDB } from '$stores/quotes';
-	import Quotes from '$components/Quotes.svelte';
-	import ParseQuotes from './parseQuotes.svelte';
-	import AddQuote from './AddQuote.svelte';
 	import { onMount } from 'svelte';
-	import DisplayQuotes from './DisplayQuotes.svelte';
+	import QuotesManager from './QuotesManager.svelte';
 	let fq = [];
 	// $: console.log(`🚀 ~ file: index.svelte ~ line 18 ~ fq`, fq);
 
@@ -78,8 +64,8 @@
 			{/if}
 		{/if}
 	</div> -->
-
-	<ParseQuotes bind:filteredQuotes={fq}  />
+	<QuotesManager />
+	<!-- <ParseQuotes bind:filteredQuotes={fq}  /> -->
 	<!-- <Quotes {quotes} /> -->
 	<!-- <AddQuote /> -->
 </div>

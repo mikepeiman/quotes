@@ -36,9 +36,9 @@
 
 	onMount(() => {
 		// console.log(`🚀 ~ file: AddQuote.svelte ~ line 42 ~ onMount ~ quotes`, quotes);
-		quotes.forEach(quote => {
-		  addQuote(quote);
-		});
+		// quotes.forEach(quote => {
+		//   addQuote(quote);
+		// });
 	});
 
 	function endpoint() {
@@ -91,15 +91,32 @@
 			<span class="label-text">Source</span>
 		</label>
 		<input type="text" placeholder="Source" class="input" bind:value={source} />
-		<button
-			type="submit"
-			class="p-3 rounded bg-green-800 hover:bg-green-700 mt-4"
-			on:click={handleSubmit}>Add Quote</button
-		>
-		<button
-			type="submit"
-			class="p-3 rounded bg-blue-800 hover:bg-blue-700 mt-4"
-			on:click={() => endpoint()}>Get DGraph quotes</button
-		>
+		<div class="flex">
+			<button
+				type="submit"
+				class="grow p-3 mx-1 rounded bg-ceruleanblue-800 hover:bg-ceruleanblue-700 mt-4"
+				on:click={handleSubmit}>Add to Dgraph</button
+			>
+			<button
+				type="submit"
+				class="grow p-3 mx-1 rounded bg-fuchsia-800 hover:bg-fuchsia-700 mt-4"
+				on:click={handleSubmit}>Add to Supabase</button
+			>
+			<button
+				type="submit"
+				class="grow p-3 mx-1 rounded bg-green-800 hover:bg-green-700 mt-4"
+				on:click={handleSubmit}>Add to EdgeDB</button
+			>
+			<button
+				type="submit"
+				class="grow p-3 mx-1 rounded bg-orange-800 hover:bg-orange-700 mt-4"
+				on:click={handleSubmit}>Add to Redis</button
+			>
+			<button
+				type="submit"
+				class="grow p-3 mx-1 rounded bg-cyan-800 hover:bg-cyan-700 mt-4"
+				on:click={handleSubmit}>Add to TypeDB</button
+			>
+		</div>
 	</div>
 </div>
