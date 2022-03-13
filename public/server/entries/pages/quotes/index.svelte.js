@@ -2,7 +2,7 @@ import { c as create_ssr_component, v as validate_component } from "../../../chu
 import ParseQuotes from "./parseQuotes.svelte.js";
 import { q as quotesArray } from "../../../chunks/quotes-5c506588.js";
 import "graphql-request";
-import "../../../chunks/dgraph-client-b4a302b9.js";
+import "../../../chunks/dgraphClient-b4a302b9.js";
 import "./DisplayQuotes.svelte.js";
 import "../../../chunks/Icon-79f8c708.js";
 import "../../../chunks/functions-9959eb37.js";

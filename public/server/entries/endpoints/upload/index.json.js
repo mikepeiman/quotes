@@ -1,4 +1,4 @@
-import { c as client } from "../../../chunks/dgraph-client-b4a302b9.js";
+import { c as client } from "../../../chunks/dgraphClient-b4a302b9.js";
 import { gql } from "graphql-request";
 let quotes;
 const mutateQuotes = gql`

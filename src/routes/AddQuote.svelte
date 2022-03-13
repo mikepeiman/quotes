@@ -14,7 +14,7 @@
 	import { addQuote, uploadQuote } from '$stores/quotes.js';
 	import { onMount } from 'svelte';
 	import { gql, request } from 'graphql-request';
-	import { client } from '$lib/dgraph-client';
+	import { dgraph } from '$lib/dgraphClient';
 	export let quotes, dgraph_quotes;
 	let quoteBody, authorName, authorTitle, context, tags, source, originalText;
 	const handleSubmit = () => {

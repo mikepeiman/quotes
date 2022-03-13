@@ -1,4 +1,4 @@
-import { client } from '$lib/dgraph-client'
+import { client } from '$lib/dgraphClient'
 import { gql } from 'graphql-request'
 // import { saveFile } from '$lib/save-file'
 let quote = {

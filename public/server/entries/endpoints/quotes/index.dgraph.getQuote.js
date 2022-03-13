@@ -1,4 +1,4 @@
-import { c as client } from "../../../chunks/dgraph-client-b4a302b9.js";
+import { c as client } from "../../../chunks/dgraphClient-b4a302b9.js";
 import { gql } from "graphql-request";
 console.log(`\u{1F680} ~ file: index.dgraph.getQuote.json.js ~ line 2 ~ client `, client);
 console.log(`calling index.dgraph.getQuote.json.js`);

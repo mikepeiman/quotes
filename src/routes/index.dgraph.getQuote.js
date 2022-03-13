@@ -1,5 +1,5 @@
-import { client } from '$lib/dgraph-client'
-console.log(`🚀 ~ file: index.dgraph.getQuote.json.js ~ line 2 ~ client `, client)
+import { dgraph } from '$lib/dgraphClient'
+console.log(`🚀 ~ file: index.dgraph.getQuote.json.js ~ line 2 ~ dgraph `, dgraph)
 import { gql, request } from 'graphql-request'
 
 console.log(`calling index.dgraph.getQuote.json.js`)
@@ -16,8 +16,6 @@ const getAllQuotes = gql`query MyQuery {
   }
   }
 `
-
-
 
 export const get = async ({ url }) => {
   console.log(`🚀 ~ file: index.dgraph.getQuote.js ~ line 23 ~ get ~ url`, url)
@@ -165,13 +163,13 @@ export const get = async ({ url }) => {
   }
 
   try {
-    await client.request(getAllQuotes).then((res) => {
-      console.log(`🚀 ~ file: index.dgraph.getQuote.js ~ line 103 ~ awaitclient.request ~ payload\n\n`, payload)
-      console.log(`🚀 ~ file: index.json.js ~ line 138 ~ awaitclient.request ~ res\n\n`, res)
-      console.log(`🚀 ~ file: index.json.js ~ line 138 ~ awaitclient.request ~ res\n\n`, res.length)
+    await dgraph.request(getAllQuotes).then((res) => {
+      console.log(`🚀 ~ file: index.dgraph.getQuote.js ~ line 103 ~ awaitdgraph.request ~ payload\n\n`, payload)
+      console.log(`🚀 ~ file: index.json.js ~ line 138 ~ awaitdgraph.request ~ res\n\n`, res)
+      console.log(`🚀 ~ file: index.json.js ~ line 138 ~ awaitdgraph.request ~ res\n\n`, res.length)
       data = res.queryQuote
       queryType === "upsertQuote" || queryType === "addQuote" ? data = res.addQuote.quote : data = res.queryQuote
-      console.log(`🚀 ~ file: index.dgraph.getQuote.js ~ line 141 ~ awaitclient.request ~ data\n\n`, data)
+      console.log(`🚀 ~ file: index.dgraph.getQuote.js ~ line 141 ~ awaitdgraph.request ~ data\n\n`, data)
     })
     return {
       status: 200,

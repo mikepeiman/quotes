@@ -1,5 +1,5 @@
 // import { initClient, operationStore, query, mutation } from "@urql/svelte";
-import { client } from '$lib/dgraph-client'
+import { client } from '$lib/dgraphClient'
 import { gql, request } from 'graphql-request'
 // const VITE_DGRAPH_ENDPOINT = import.meta.env['VITE_DGRAPH_ENDPOINT'];
 // initClient({

@@ -2,7 +2,7 @@ import { c as create_ssr_component, b as subscribe, k as add_attribute, j as eac
 import { q as quotesArray, a as addedQuotes } from "../../../chunks/quotes-5c506588.js";
 import DisplayQuotes from "./DisplayQuotes.svelte.js";
 import "graphql-request";
-import "../../../chunks/dgraph-client-b4a302b9.js";
+import "../../../chunks/dgraphClient-b4a302b9.js";
 /* empty css                                                                  */import "../../../chunks/index-5b1f353a.js";
 import "../../../chunks/Icon-79f8c708.js";
 import "../../../chunks/functions-9959eb37.js";

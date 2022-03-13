@@ -5,7 +5,7 @@ import "./findNextSeparatingCharacter.js";
 import "./getMinNotFalse.js";
 import "../../../chunks/index-5b1f353a.js";
 import "../../../chunks/index-e675dbce.js";
-import "../../../chunks/dgraph-client-b4a302b9.js";
+import "../../../chunks/dgraphClient-b4a302b9.js";
 import "graphql-request";
 const cheerio = require("cheerio");
 const htmlparser2 = require("htmlparser2");

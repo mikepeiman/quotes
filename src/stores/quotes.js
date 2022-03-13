@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
-import { client } from '$lib/dgraph-client'
+import { dgraph } from "$lib/dgraphClient"
+import { supabase } from "$lib/supabaseClient";
 import { gql, request } from 'graphql-request'
 const quotesFile = writable({})
 const fileContent = writable({})
@@ -21,10 +22,10 @@ export const uploadQuote = async (quote) => {
           }`
     console.log(`🚀 ~file: quotes.js ~line 19 ~uploadQuote ~query`, query)
     // try {
-    await client.request(query).then((data) => {
-        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitclient.request ~ data`, data)
+    await dgraph.request(query).then((data) => {
+        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitdgraph.request ~ data`, data)
         dgraph_quotes = data.queryQuote
-        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitclient.request ~ dgraph_quotes`, dgraph_quotes)
+        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitdgraph.request ~ dgraph_quotes`, dgraph_quotes)
     })
     return {
         status: 200,
@@ -48,10 +49,10 @@ export const getAllQuotesFromDB = async () => {
     let dgraph_quotes
     try {
         const query = getAllQuotes
-        await client.request(query).then((data) => {
-            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitclient.request ~ data`, data)
+        await dgraph.request(query).then((data) => {
+            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitdgraph.request ~ data`, data)
             dgraph_quotes = data.queryQuote
-            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitclient.request ~ dgraph_quotes`, dgraph_quotes)
+            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitdgraph.request ~ dgraph_quotes`, dgraph_quotes)
         })
         return {
             status: 200,

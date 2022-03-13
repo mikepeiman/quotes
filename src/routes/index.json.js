@@ -1,4 +1,4 @@
-import { client } from '$lib/dgraph-client'
+import { dgraph } from '$lib/dgraphClient'
 import { gql, request } from 'graphql-request'
 
 
@@ -17,7 +17,7 @@ const getAllQuotes = gql`query MyQuery {
 export const get = async () => {
   try {
     const query = getAllQuotes
-    await client.request(query).then((data) => {
+    await dgraph.request(query).then((data) => {
       quotes = data.queryQuote
     })
     return {

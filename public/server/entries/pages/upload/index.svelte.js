@@ -2,7 +2,7 @@ import { g as getContext, o as onDestroy, s as setContext, c as create_ssr_compo
 import "../../../chunks/quotes-5c506588.js";
 import "../../../chunks/functions-9959eb37.js";
 import "graphql-request";
-import "../../../chunks/dgraph-client-b4a302b9.js";
+import "../../../chunks/dgraphClient-b4a302b9.js";
 /* empty css                                                                  */import { createRequest, stringifyVariables, Client } from "@urql/core";
 import { w as writable } from "../../../chunks/index-5b1f353a.js";
 /* empty css                                                            */function l(a, b) {

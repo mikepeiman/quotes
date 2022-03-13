@@ -1,5 +1,5 @@
 import { w as writable } from "./index-5b1f353a.js";
-import "./dgraph-client-b4a302b9.js";
+import "./dgraphClient-b4a302b9.js";
 import { gql } from "graphql-request";
 const quotesFile = writable({});
 const fileContent = writable({});

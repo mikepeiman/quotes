@@ -1,7 +1,7 @@
 import { c as create_ssr_component, k as add_attribute } from "../../../chunks/index-e675dbce.js";
 import "../../../chunks/quotes-5c506588.js";
 import { gql } from "graphql-request";
-import "../../../chunks/dgraph-client-b4a302b9.js";
+import "../../../chunks/dgraphClient-b4a302b9.js";
 import "../../../chunks/index-5b1f353a.js";
 const AddQuote = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { quotes, dgraph_quotes } = $$props;

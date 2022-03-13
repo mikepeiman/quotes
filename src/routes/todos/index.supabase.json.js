@@ -1,4 +1,4 @@
-import { client } from '$lib/dgraph-client'
+import { client } from '$lib/dgraphClient'
 import { gql, request } from 'graphql-request'
 
 console.log(`calling index.dgraph.json.js`)
