@@ -19,9 +19,16 @@
 	import { onMount } from 'svelte';
 	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
-
 	import AddQuote from './AddQuote.svelte';
+	
+	export let filteredQuotes = [];
 
+	let addQuoteForm = false;
+	let input_file = [];
+	let contents = '';
+	let quotes = [];
+	let searchTerm = '';
+	let quotesArrays = [];
 	let fsFileContent,
 		fsQuotesArray,
 		dbQuotes,
@@ -62,19 +69,7 @@
 			quotesArray.set(dbQuotes.body.dgraph_quotes);
 	}
 
-	let addQuoteForm = false;
-	let input_file = [];
-	let contents = '';
-	let quotes = [];
-	let searchTerm = '';
-	export let filteredQuotes = [];
-	let multiLineQuote = 0;
-	let quotesArrays = [];
-	let filteredQuotesArrays = [];
-	let quotesObjects = [];
-	let filteredQuotesObjects = [];
 	$: {
-		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 35 ~ addedQuotes`, $addedQuotes);
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
             console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm)
@@ -82,12 +77,7 @@
 				quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
 				quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
 			);
-			// quote.authorTitle !== null &&
-			// quote.authorTitle !== undefined &&
-			// quote.authorTitle.length > 0
 		} else {
-			// let titledQuotes = quotes.filter(quote =>  quote.title.length > 0)
-			// filteredQuotes = [...$addedQuotes, ...titledQuotes];
 			filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		}
 	}
@@ -149,42 +139,11 @@
 		}
 	}
 
-	function reParseFile(input_file) {
-		console.log(
-			`🚀 ~ file: QuotesManager.svelte ~ line 87 ~ reParseFile ~ reParseFile, input_file`,
-			input_file
-		);
-		localStorage.setItem('quotesArray', []);
-		if (input_file) {
-			console.log(
-				`🚀 ~ file: QuotesManager.svelte ~ line 14 ~ reParseFile ~ input_file`,
-				input_file[0]
-			);
-			file = input_file[0];
-			var reader = new FileReader();
-			reader.onload = function (event) {
-				contents = event.target.result;
-				console.log('Successfully read file');
-				storedFileContent.set(contents);
-				parseFile(contents);
-			};
-			reader.onerror = function (err) {
-				console.error('Failed to read file', err);
-			};
-			reader.readAsText(file);
-		}
-	}
-
 	function parseFile(doc) {
 		const parser = new DOMParser();
 		const htmlDoc = parser.parseFromString(doc, 'text/html');
 		let divs = htmlDoc.getElementsByTagName('div');
 		quotesArrays = isolateQuotationBlocks(divs);
-		// console.log(
-		// 	`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ parseFile ~ quotesArrays`,
-		// 	quotesArrays.length,
-		// 	quotesArrays
-		// );
 		for (let i = 0; i < quotesArrays.length; i++) {
 			// if (i === 414 || i === 415 || i === 416 || i === 417 || i === 421 || i === 422) {
 			// if (i === 145  || i === 146 ) {
@@ -213,12 +172,7 @@
 			workingQuoteObject['title'] = '';
 			workingQuoteObject['tags'] = [];
 			workingQuoteObject['sources'] = [];
-			// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 77 ~ parseFile ~ workingQuoteObject`, workingQuoteObject)
 			workingQuoteObject = parse(workingQuoteObject);
-			// workingQuoteObject['details'] = [];
-			// workingQuoteObject['startingItem'] = item;
-			// workingQuoteObject = parseQuoteText(workingQuoteObject);
-			// workingQuoteObject = parseQuoteRemainder(workingQuoteObject);
 			quotes = [...quotes, workingQuoteObject];
 		}
 		// }
@@ -333,17 +287,6 @@
 				>Add New Quote</button
 			>
 		{/if}
-		<!-- {#if !dbQuotes?.body?.dgraph_quotes}
-		<button class="p-4 rounded bg-indigo-600 m-3" on:click={reParseFile(file)}
-			>Re-parse quotes file</button
-		>
-		<button class="p-4 rounded bg-indigo-600 m-3" on:click={getDgraphQuotes}
-			>Get dgraph quotes</button
-		>
-		<button class="p-4 rounded bg-indigo-600 m-3" on:click={addQuotesToDgraph}
-			>Add many quotes to dgraph</button
-		>
-		{/if} -->
 	</div>
 
 	<div class="quotes">
@@ -360,33 +303,11 @@
 <style lang="scss">
 	@import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
-	/* font-family: 'Allura', cursive;
-font-family: 'Bad Script', cursive;
-font-family: 'Coda', cursive;
-font-family: 'Dancing Script', cursive;
-font-family: 'Forum', cursive;
-font-family: 'Gideon Roman', cursive;
-font-family: 'Great Vibes', cursive;
-font-family: 'Karla', sans-serif;
-font-family: 'Lemonada', cursive;
-font-family: 'Lobster', cursive;
-font-family: 'Merriweather', serif;
-font-family: 'Monoton', cursive;
-font-family: 'Montserrat', sans-serif;
-font-family: 'Outfit', sans-serif;
-font-family: 'Overlock', cursive;
-font-family: 'Staatliches', cursive; */
-
 	.quotes-wrapper {
 		background: #122334;
 	}
 
 	input#fileInput {
-		/* display: inline-block; */
-		/* width: 100%; */
-		/* position: absolute; */
-		/* left: 2rem; */
-		/* top: 2rem; */
 		position: relative;
 		padding: 2.9rem 0 0 0;
 		height: 0px;
@@ -413,57 +334,22 @@ font-family: 'Staatliches', cursive; */
 	}
 
 	.quotes {
-		/* font-family: 'Karla', sans-serif; */
-		/* font-family: 'Lemonada', cursive; */
 		font-family: 'Merriweather', serif;
-		/* font-family: 'Montserrat', sans-serif; */
-		/* font-family: 'Outfit', sans-serif; */
-		/* font-family: 'Overlock', cursive; */
-		/* font-family: 'Staatliches', cursive; */
-
 		font-weight: 300;
 	}
-	.quote {
-		// font-size: 150%;
-		// background: linear-gradient(
-		// 	36deg,
-		// 	rgba(2, 0, 36, 0) 0%,
-		// 	rgba(9, 9, 121, 0.5) 35%,
-		// 	rgba(2, 0, 36, 0) 100%,
-		// 	rgba(0, 212, 255, 0.1) 100%
-		// );
-	}
+
 
 	.quote-author {
 		color: rgba(100, 200, 255, 1);
 	}
 
-	.quote-body {
-		/* background: rgba(10,20,30,1);  */
-		/* font-family: 'Gideon Roman', cursive; */
-		/* font-family: 'Forum', cursive; */
-		/* font-family: 'Bad Script', cursive; */
-	}
 
 	.quote-mark {
 		font-family: 'Montserrat', serif;
 		font-size: 125%;
 		font-weight: 300;
 		font-weight: 100;
-		/* color: rgba(100, 200, 255, 1); */
-
-		/* font-family: 'Bad Script', cursive; */
 		font-family: 'Coda', cursive;
-		/* font-family: 'Forum', cursive; */
-		/* font-family: 'Gideon Roman', cursive; */
-		/* font-family: 'Karla', sans-serif; */
-		/* font-family: 'Lemonada', cursive; */
-		/* font-family: 'Lobster', cursive; */
-		/* font-family: 'Merriweather', serif;
-        font-size: 100%; */
-		/* font-family: 'Outfit', sans-serif; */
-		/* font-family: 'Overlock', cursive; */
-		/* font-family: 'Staatliches', cursive; */
 	}
 	.badge {
 		font-family: 'Montserrat', sans-serif;
@@ -475,12 +361,7 @@ font-family: 'Staatliches', cursive; */
 		font-family: 'Merriweather', serif;
 		font-family: 'Karla', sans-serif;
 		font-size: 175%;
-		/* font-family: 'Dancing Script', cursive;
-        font-size: 250%; */
 		font-weight: 300;
-
-		/* background: rgba(2, 0, 36, 1); */
-
 		border-radius: 5px 5px 5px 0;
 	}
 
