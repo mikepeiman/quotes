@@ -122,7 +122,7 @@
 			class="quote-mark text-sky-300">&rdquo;</span
 		>
 		<span class="quote-author text-sky-300"
-			>~ {quote.author.name ? quote.author.name : quote.author}</span
+			>~ {quote.author?.name ? quote.author.name : quote.author}</span
 		>
 	</h1>
 	<div class="flex flex-col justify-items-start place-items-start">

@@ -7,3 +7,7 @@
 * add UI control to display optional fields
 * add an optional-display field for "verified" to indicate if a quote was researched as valid; checkbox + array of URLS + field for notes/comments
 * get on the dgraph chat channel (Discord?) and ask for help solving my duplicate Authors in upsert operations
+
+## Broad ideas
+
+* add an injunction statement in the production app, pointing to a page on CivilDiscourse.io, that commends people to be impeccable with the wording of quotes and to research their veracity, to improve the quality of human knowledge and truth-telling

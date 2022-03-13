@@ -1,12 +1,3 @@
-<!-- <script context="module">
-    	export const load = async ({ fetch }) => {
-		const res = await fetch('/todos.json');
-		if (res.ok) {
-			const { todos } = await res.json();
-			return { props: { todos } };
-		}
-	};
-</script> -->
 <script>
 	import {
 		storedQuotesFile,
@@ -37,15 +28,15 @@
 		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
 		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
 		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 28 ~ quotes`, quotes);
-		if (quotes.length) {
+		// if (quotes.length) {
 			// quotes.forEach((quote) => {
 			// 	console.log(`🚀 ~ file: QuotesManager.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
 			// 	// setTimeout(() => {
 			// 	// 	uploadQuote(quote, "upsertQuote")
 			// 	// }, 100);
 			// });
-		}
-		storedQuotesArray.set(quotes);
+		// }
+		storedQuotesArray.set([...$addedQuotes, ...quotes]);
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 	} else {
 		if (fsFileContent) {
