@@ -7,6 +7,8 @@
 * add UI control to display optional fields
 * add an optional-display field for "verified" to indicate if a quote was researched as valid; checkbox + array of URLS + field for notes/comments
 * get on the dgraph chat channel (Discord?) and ask for help solving my duplicate Authors in upsert operations
+* add a "clear form" to AddQuote form which also clears ls currentQuote
+* add a "delete" icon to DisplayQuotes component for each quote. Initially this removes only from stores and ls; later apply to each db
 
 ## Broad ideas
 
