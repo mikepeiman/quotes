@@ -1,21 +1,10 @@
-<script context="module">
-	// export const load = async ({ fetch }) => {
-	// 	const res = await fetch('/upload.json');
-	// 	if (res.ok) {
-	// 		const { data } = await res.json();
-	// 		return { props: { data } };
-	// 	}
-	// };
-</script>
-
 <script>
 	import { initClient, operationStore, query, mutation } from '@urql/svelte';
+	// this is a working example of how to use the urql client, as opposed to the graphql-request library used elsewhere
 	const VITE_DGRAPH_ENDPOINT = import.meta.env['VITE_DGRAPH_ENDPOINT'];
 	initClient({
 		url: VITE_DGRAPH_ENDPOINT
 	});
-	import { gql, request } from 'graphql-request';
-	import About from '../about.svelte';
 	export let id;
 	let quoteBody = '';
 	let quoteAuthor = '';

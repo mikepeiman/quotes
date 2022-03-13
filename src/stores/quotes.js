@@ -1,11 +1,14 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 import { dgraph } from "$lib/dgraphClient"
 import { supabase } from "$lib/supabaseClient";
 import { gql, request } from 'graphql-request'
 const quotesFile = writable({})
 const fileContent = writable({})
 export const quotesArray = writable([])
+export const currentQuote = writable({})
 export const addedQuotes = writable([])
+
+
 
 export const addQuote = (quote) => {
     console.log(`🚀 ~ file: quotes.js ~ line 9 ~ addQuote ~ quote`, quote)
@@ -21,7 +24,7 @@ export const uploadQuote = async (quote) => {
             { numUids}
           }`
     console.log(`🚀 ~file: quotes.js ~line 19 ~uploadQuote ~query`, query)
-    // try {
+    try {
     await dgraph.request(query).then((data) => {
         console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitdgraph.request ~ data`, data)
         dgraph_quotes = data.queryQuote
@@ -31,11 +34,11 @@ export const uploadQuote = async (quote) => {
         status: 200,
         body: { dgraph_quotes }
     }
-    // } catch (error) {
-    //     return {
-    //         body: { error: 'There was a server error' }
-    //     }
-    // }
+    } catch (error) {
+        return {
+            body: { error: 'There was a server error' }
+        }
+    }
 }
 
 export const deleteQuote = (id) => {
@@ -97,5 +100,16 @@ export const storedQuotesArray = {
     set: val => {
         quotesArray.set(val);
         localStorage.setItem("quotesArray", JSON.stringify(val));
+    }
+};
+
+export const storeCurrentQuote = {
+    subscribe: currentQuote.subscribe,
+    set: val => {
+        currentQuote.set(val);
+        localStorage.setItem("currentQuote", JSON.stringify(val));
+    },
+    get: () => {
+        return localStorage.getItem("currentQuote");
     }
 };
