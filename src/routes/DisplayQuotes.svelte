@@ -1,12 +1,13 @@
 <script>
 	export let quote, i;
 	import Icon from '@iconify/svelte';
-
+	import { page } from '$app/stores';
 	let icons = {
 		edit: 'akar-icons:edit',
 		question: 'akar-icons:question',
 		upload: 'ant-design:cloud-upload-outlined',
-		upsert: 'clarity:upload-outline-badged'
+		upsert: 'clarity:upload-outline-badged',
+		delete: 'fluent:delete-dismiss-20-filled'
 	};
 
 	const handleEdit = (i) => {
@@ -71,21 +72,7 @@
 		fire();
 	}
 
-	function endpoint() {
-		const fire = async () => {
-			const res = await fetch('/quotes.dgraph.getQuote.json');
-			if (res.ok) {
-				const { dgraph_quotes } = await res.json();
-				console.log(`🚀 ~ file: AddQuote.svelte ~ line 53 ~ load ~ dgraph_quotes`, dgraph_quotes);
-				dgraph_quotes.forEach((quote) => {
-					// console.log(`🚀 ~ file: AddQuote.svelte ~ line 73 ~ endpoint ~ quote`, quote)
-					addQuote(quote);
-				});
-				return { props: { dgraph_quotes } };
-			}
-		};
-		fire();
-	}
+	function deleteQuote() {}
 </script>
 
 <div
@@ -93,23 +80,31 @@
 >
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		<div class="flex">
-			<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
-				<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1" />
+		{#if $page.url.pathname !== '/'}
+			<div class="flex">
+				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
+					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
+					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'addQuote')}
+				>
+					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'upsertQuote')}
+				>
+					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQuote(quote, 'local')}>
+					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
 			</div>
-			<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
-				<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1" />
-			</div>
-			<div class="edit-quote hover:cursor-pointer" on:click={() => uploadQuote(quote, 'addQuote')}>
-				<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1" />
-			</div>
-			<div
-				class="edit-quote hover:cursor-pointer"
-				on:click={() => uploadQuote(quote, 'upsertQuote')}
-			>
-				<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
-			</div>
-		</div>
+		{/if}
 	</div>
 	<!-- <label class="input-group input-group-xs rounded-none">
 		<span class="bg-slate-900 rounded-none">Original</span>

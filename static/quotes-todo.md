@@ -9,6 +9,7 @@
 * get on the dgraph chat channel (Discord?) and ask for help solving my duplicate Authors in upsert operations
 * add a "clear form" to AddQuote form which also clears ls currentQuote
 * add a "delete" icon to DisplayQuotes component for each quote. Initially this removes only from stores and ls; later apply to each db
+* add an "edit" action that converts any quote to an editable form, probably through DisplayQuotes component conditional rendering logic
 
 ## Broad ideas
 

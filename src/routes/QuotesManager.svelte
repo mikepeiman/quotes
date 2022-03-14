@@ -11,6 +11,7 @@
 	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
 	import AddQuote from './AddQuote.svelte';
+	import { page} from '$app/stores'
 	
 	export let filteredQuotes = [];
 
@@ -83,6 +84,8 @@
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page)
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page.url)
 	});
 
 	function uploadQuote(quote, operationType) {

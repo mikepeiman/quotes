@@ -13,13 +13,13 @@ Great!
 	import { dgraph } from '$lib/dgraphClient';
 
 	import TextareaAutoResize from '$lib/textAreaAutoResize.js';
-
-import DisplayQuotes from '../DisplayQuotes.svelte';
-import QuotesManager from '../QuotesManager.svelte';
-import GetQuotes from './GetQuotesButtons.svelte';
-import QuotesStorageControls from './QuotesStorageControls.svelte';
-import AddQuoteForm from './AddQuoteForm.svelte';
-	let textareaElements
+	import { page } from '$app/stores';
+	import DisplayQuotes from '../DisplayQuotes.svelte';
+	import QuotesManager from '../QuotesManager.svelte';
+	import GetQuotes from './GetQuotesButtons.svelte';
+	import QuotesStorageControls from './QuotesStorageControls.svelte';
+	import AddQuoteForm from './AddQuoteForm.svelte';
+	let textareaElements;
 	export let quotes, dgraph_quotes;
 	let quoteBody, authorName, authorTitle, context, tags, source, originalText;
 	const handleSubmit = (db) => {
@@ -41,7 +41,10 @@ import AddQuoteForm from './AddQuoteForm.svelte';
 	};
 
 	function updateCurrentQuote() {
-		console.log(`🚀 ~ file: AddQuote.svelte ~ line 32 ~ updateCurrentQuote ~ originalText`, originalText);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 32 ~ updateCurrentQuote ~ originalText`,
+			originalText
+		);
 		let currentQuote = {
 			originalText,
 			quoteBody,
@@ -53,12 +56,10 @@ import AddQuoteForm from './AddQuoteForm.svelte';
 		};
 		storeCurrentQuote.set(currentQuote);
 	}
-$: quoteBody, authorName, authorTitle, context, tags, source
-	onMount(() => {
-
-	});
-
+	$: quoteBody, authorName, authorTitle, context, tags, source;
+	onMount(() => {});
 </script>
+
 <div class="flex flex-col bg-red-500">
 	<AddQuoteForm />
 	<QuotesStorageControls />
