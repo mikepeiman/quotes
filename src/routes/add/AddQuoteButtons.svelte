@@ -19,8 +19,14 @@ Great!
 	const handleSubmit = (db) => {
 		console.log(`🚀 ~ file: index.svelte ~ line 21 ~ handleSubmit clicked 💎💎💎~ db`, db);
 		originalText = `${quoteBody} - ${authorName}, ${authorTitle} @(${context}), #(${tags}), [${source}]`;
-		tags ? (tags = tags.split(',').map((tag) => tag.trim())) : null;
-		// console.log(`🚀 ~ file: AddQuote.svelte ~ line 14 ~ handleSubmit ~ tags`, tags);
+        console.log(`🚀 ~ file: AddQuoteButtons.svelte ~ line 22 ~ handleSubmit ~ originalText`, originalText)
+		console.log(`🚀 ~ file: AddQuote.svelte ~ line 14 ~ handleSubmit ~ tags`, tags, typeof tags)
+		if(tags && typeof tags === 'string') {
+			tags = tags.split(',').map((tag) => tag.trim())
+		}
+		// tags ? (tags = tags.split(',').map((tag) => tag.trim())) : tags;
+		// (tags && !tags instanceof Array) ? (tags = tags.split(',').map((tag) => tag.trim())) : null;
+		console.log(`🚀 ~ file: AddQuote.svelte ~ line 16 ~ handleSubmit ~ tags`, tags);
 		let quote = {
 			originalText,
 			quoteBody,
