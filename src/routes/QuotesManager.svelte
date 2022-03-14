@@ -254,7 +254,8 @@
 </script>
 
 <div class=" quotes-wrapper flex flex-col w-full bg-black">
-	<div class="file-and-search-wrapper flex items-start justify-center mt-12">
+	<div class="file-and-search-wrapper flex items-start  justify-center mt-12">
+		{#if  $page.url.pathname !== "/"}
 		<div class="fileinput-wrapper ml-12">
 			<input
 				class="input input-primary w-48 p-0 border-2 border-indigo-600"
@@ -264,7 +265,8 @@
 				on:change={readFile(input_file)}
 			/>
 		</div>
-		<div class="flex w-full items-center justify-start m-0 ml-8">
+		{/if}
+		<div class="flex w-full items-center justify-center m-0 ml-8">
 			<input
 				type="text"
 				id="filterTextBar"
@@ -275,18 +277,22 @@
 		</div>
 	</div>
 	<div class="flex w-full">
+		{#if  $page.url.pathname !== "/"}
 		{#if addQuoteForm}<AddQuote />
 		{:else}
 			<button class="p-4 rounded bg-indigo-600 m-3" on:click={showAddQuoteForm}
 				>Add New Quote</button
 			>
 		{/if}
+		{/if}
 	</div>
 
 	<div class="quotes">
 		{#if filteredQuotes.length}
 			{#each filteredQuotes as quote, i}
+			{#if quote.quoteBody}
 				<DisplayQuotes {quote} {i} />
+				{/if}
 			{/each}
 		{:else}
 			loading...
