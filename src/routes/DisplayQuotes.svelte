@@ -75,7 +75,7 @@
 
 	function deleteQ() {
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ deleteQuote ~ quote, i`, quote, i)
-		deleteQuote(quote.id)
+		deleteQuote(quote)
 	}
 </script>
 

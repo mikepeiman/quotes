@@ -50,14 +50,19 @@ export const uploadQuote = async (quote) => {
     }
 }
 
-export const deleteQuote = (id) => {
-    console.log(`🚀 ~ file: quotes.js ~ line 55 ~ deleteQuote ~ quotesArray`, get(quotesArray))
-    quotesArray.update((cur) => cur.filter((quote) => quote.id !== id))
+export const deleteQuote = (q) => {
+console.log(`🚀 ~ file: quotes.js ~ line 54 ~ deleteQuote ~ id`, q.id)
+if(q.id){
+    quotesArray.update((cur) => cur.filter((quote) => quote.id !== q.id))
     storedQuotesArray.set(get(quotesArray))
-    console.log(`🚀 ~ file: quotes.js ~ line 55 ~ deleteQuote ~ quotesArray`, get(quotesArray))
-    console.log(`🚀 ~ file: quotes.js ~ line 57 ~ deleteQuote ~ addedQuotes`, get(addedQuotes))
-    addedQuotes.update((cur) => cur.filter((quote) => quote.id !== id))
-    console.log(`🚀 ~ file: quotes.js ~ line 57 ~ deleteQuote ~ addedQuotes`, get(addedQuotes))
+    addedQuotes.update((cur) => cur.filter((quote) => quote.id !== q.id))
+} else {
+    let quotes = get(quotesArray)
+    // filter quotes array and remove quote with matching quoteBody and author.name
+    quotesArray.update(cur => cur.filter((quote) => quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name))
+    // storedQuotesArray.set(quotes.filter((quote) => quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name))
+}
+
 }
 
 export const getAllQuotesFromDB = async () => {
