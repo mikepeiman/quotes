@@ -7,22 +7,27 @@ I just need to hide the scrollbars - oh, the tailwindCSS class worked.
 Great!
  -->
 <script>
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 	import { addQuote, uploadQuote, storeCurrentQuote } from '$stores/quotes.js';
 	import { onMount } from 'svelte';
 	import { gql, request } from 'graphql-request';
 	import { dgraph } from '$lib/dgraphClient';
 
 	import TextareaAutoResize from '$lib/textAreaAutoResize.js';
-	let textareaElements
+	let textareaElements;
 	export let quotes, dgraph_quotes;
 	let quoteBody, authorName, authorTitle, context, tags, source, originalText;
 	const handleSubmit = (db) => {
 		console.log(`🚀 ~ file: index.svelte ~ line 21 ~ handleSubmit clicked 💎💎💎~ db`, db);
 		originalText = `${quoteBody} - ${authorName}, ${authorTitle} @(${context}), #(${tags}), [${source}]`;
-        console.log(`🚀 ~ file: AddQuoteButtons.svelte ~ line 22 ~ handleSubmit ~ originalText`, originalText)
-		console.log(`🚀 ~ file: AddQuote.svelte ~ line 14 ~ handleSubmit ~ tags`, tags, typeof tags)
-		if(tags && typeof tags === 'string') {
-			tags = tags.split(',').map((tag) => tag.trim())
+		console.log(
+			`🚀 ~ file: AddQuoteButtons.svelte ~ line 22 ~ handleSubmit ~ originalText`,
+			originalText
+		);
+		console.log(`🚀 ~ file: AddQuote.svelte ~ line 14 ~ handleSubmit ~ tags`, tags, typeof tags);
+		if (tags && typeof tags === 'string') {
+			tags = tags.split(',').map((tag) => tag.trim());
 		}
 		// tags ? (tags = tags.split(',').map((tag) => tag.trim())) : tags;
 		// (tags && !tags instanceof Array) ? (tags = tags.split(',').map((tag) => tag.trim())) : null;
@@ -32,7 +37,7 @@ Great!
 			quoteBody,
 			author: {
 				name: authorName,
-				title: authorTitle,
+				title: authorTitle
 			},
 			context,
 			tags,
@@ -43,7 +48,10 @@ Great!
 	};
 
 	function updateCurrentQuote() {
-		console.log(`🚀 ~ file: AddQuote.svelte ~ line 32 ~ updateCurrentQuote ~ originalText`, originalText);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 32 ~ updateCurrentQuote ~ originalText`,
+			originalText
+		);
 		let currentQuote = {
 			originalText,
 			quoteBody,
@@ -55,16 +63,15 @@ Great!
 		};
 		storeCurrentQuote.set(currentQuote);
 	}
-$: quoteBody, authorName, authorTitle, context, tags, source
+	$: quoteBody, authorName, authorTitle, context, tags, source;
 	onMount(() => {
+		textareaElements = document.querySelectorAll('textarea');
+		console.log(`🚀 ~ file: index.svelte ~ line 44 ~ textareaElements`, textareaElements);
+		for (const textareaElement of textareaElements) {
+			new TextareaAutoResize(textareaElement);
+		}
 
-			textareaElements = document.querySelectorAll('textarea');
-            console.log(`🚀 ~ file: index.svelte ~ line 44 ~ textareaElements`, textareaElements)
-			for (const textareaElement of textareaElements) {
-				new TextareaAutoResize(textareaElement);
-			}
-
-			checkIfCurrentQuoteExistsAndPopulateForm()
+		checkIfCurrentQuoteExistsAndPopulateForm();
 
 		// console.log(`🚀 ~ file: AddQuote.svelte ~ line 42 ~ onMount ~ quotes`, quotes);
 		// quotes.forEach(quote => {
@@ -73,34 +80,37 @@ $: quoteBody, authorName, authorTitle, context, tags, source
 	});
 
 	function checkIfCurrentQuoteExistsAndPopulateForm() {
-		let q = JSON.parse(storeCurrentQuote.get())
-        console.log(`🚀 ~ file: index.svelte ~ line 69 ~ checkIfCurrentQuoteExistsAndPopulateForm ~ q `, q )
+		let q = JSON.parse(storeCurrentQuote.get());
+		console.log(
+			`🚀 ~ file: index.svelte ~ line 69 ~ checkIfCurrentQuoteExistsAndPopulateForm ~ q `,
+			q
+		);
 		let fieldQuoteBody = document.getElementById('quoteBody');
 		let fieldAuthorName = document.getElementById('authorName');
 		let fieldAuthorTitle = document.getElementById('authorTitle');
 		let fieldContext = document.getElementById('context');
 		let fieldTags = document.getElementById('tags');
 		let fieldSource = document.getElementById('source');
-		for(const property in q) {
-			if(q.hasOwnProperty(property)) {
-				if(property === 'quoteBody') {
+		for (const property in q) {
+			if (q.hasOwnProperty(property)) {
+				if (property === 'quoteBody') {
 					fieldQuoteBody.value = quoteBody = q[property];
-				} else if(property === 'authorName') {
+				} else if (property === 'authorName') {
 					fieldAuthorName.value = authorName = q[property];
-				} else if(property === 'authorTitle') {
+				} else if (property === 'authorTitle') {
 					fieldAuthorTitle.value = authorTitle = q[property];
-				} else if(property === 'context') {
+				} else if (property === 'context') {
 					fieldContext.value = context = q[property];
-				} else if(property === 'tags') {
+				} else if (property === 'tags') {
 					fieldTags.value = tags = q[property];
-				} else if(property === 'source') {
+				} else if (property === 'source') {
 					fieldSource.value = source = q[property];
 				}
 			}
 		}
 		for (const textareaElement of textareaElements) {
-				new TextareaAutoResize(textareaElement);
-			}
+			new TextareaAutoResize(textareaElement);
+		}
 	}
 
 	function endpoint() {
@@ -122,36 +132,35 @@ $: quoteBody, authorName, authorTitle, context, tags, source
 	}
 </script>
 
-
-		<div class="flex items-stretch justify-evenly">
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-orangeyellow-800 hover:bg-orangeyellow-700 mt-4"
-				on:click={() => handleSubmit('local')}>Add to local stores</button
-			>
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-ceruleanblue-800 hover:bg-ceruleanblue-700 mt-4"
-				on:click={() => handleSubmit('dgraph')}>Add to Dgraph</button
-			>
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-fuchsia-800 hover:bg-fuchsia-700 mt-4"
-				on:click={() => handleSubmit('supabase')}>Add to Supabase</button
-			>
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-green-800 hover:bg-green-700 mt-4"
-				on:click={() => handleSubmit('edgedb')}>Add to EdgeDB</button
-			>
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-orange-800 hover:bg-orange-700 mt-4"
-				on:click={() => handleSubmit('redis')}>Add to Redis</button
-			>
-			<button
-				type="submit"
-				class="grow p-3 mx-1 rounded bg-cyan-800 hover:bg-cyan-700 mt-4"
-				on:click={() => handleSubmit('typedb')}>Add to TypeDB</button
-			>
-		</div>
+<div class="flex items-stretch justify-evenly">
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-orangeyellow-800 hover:bg-orangeyellow-700 mt-4"
+		on:click={() => handleSubmit('local')}>Add to local stores</button
+	>
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-ceruleanblue-800 hover:bg-ceruleanblue-700 mt-4"
+		on:click={() => handleSubmit('dgraph')}>Add to Dgraph</button
+	>
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-fuchsia-800 hover:bg-fuchsia-700 mt-4"
+		on:click={() => handleSubmit('supabase')}>Add to Supabase</button
+	>
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-green-800 hover:bg-green-700 mt-4"
+		on:click={() => handleSubmit('edgedb')}>Add to EdgeDB</button
+	>
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-orange-800 hover:bg-orange-700 mt-4"
+		on:click={() => handleSubmit('redis')}>Add to Redis</button
+	>
+	<button
+		type="submit"
+		class="grow p-3 mx-1 rounded bg-cyan-800 hover:bg-cyan-700 mt-4"
+		on:click={() => handleSubmit('typedb')}>Add to TypeDB</button
+	>
+</div>
