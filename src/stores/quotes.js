@@ -2,6 +2,7 @@ import { writable, get } from "svelte/store";
 import { dgraph } from "$lib/dgraphClient"
 import { supabase } from "$lib/supabaseClient";
 import { gql, request } from 'graphql-request'
+import { v4 as uuidv4 } from 'uuid';
 const quotesFile = writable({})
 const fileContent = writable({})
 export const quotesArray = writable([])
@@ -12,6 +13,9 @@ export const addedQuotes = writable([])
 
 export const addQuote = (quote) => {
     console.log(`🚀 ~ file: quotes.js ~ line 9 ~ addQuote ~ quote`, quote)
+    if(!quote.id){
+        quote.id = uuidv4()
+    }
     addedQuotes.update((cur) => [...cur, quote])
     console.log(`🚀 ~ file: quotes.js ~ line 11 ~ addQuote ~ addedQuotes`, addedQuotes)
 }
@@ -44,6 +48,8 @@ export const uploadQuote = async (quote) => {
 export const deleteQuote = (id) => {
     addedQuotes.update((cur) => {
         const newQuotes = cur.filter(quote => quote.id !== id)
+        console.log(`🚀 ~ file: quotes.js ~ line 47 ~ addedQuotes.update ~ newQuotes`, newQuotes)
+        addedQuotes.set(newQuotes)
         return newQuotes
     })
 }

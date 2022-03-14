@@ -2,6 +2,7 @@
 	export let quote, i;
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
+	import { deleteQuote} from '$stores/quotes';
 	let icons = {
 		edit: 'akar-icons:edit',
 		question: 'akar-icons:question',
@@ -72,7 +73,10 @@
 		fire();
 	}
 
-	function deleteQuote() {}
+	function deleteQ() {
+		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ deleteQuote ~ quote, i`, quote, i)
+		deleteQuote(quote.id)
+	}
 </script>
 
 <div
@@ -100,7 +104,7 @@
 				>
 					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
 				</div>
-				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQuote(quote, 'local')}>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
 					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1" />
 				</div>
 			</div>

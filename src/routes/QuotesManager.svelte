@@ -11,13 +11,13 @@
 	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
 	import AddQuote from './AddQuote.svelte';
-	import { page} from '$app/stores'
-	
+	import { page } from '$app/stores';
+
 	export let filteredQuotes = [];
 
 	let addQuoteForm = false;
 	let input_file = [];
-	let contents = '';
+	let contents = '', multiLineQuote = 0;
 	let quotes = [];
 	let searchTerm = '';
 	let quotesArrays = [];
@@ -28,15 +28,6 @@
 	$: if (fsQuotesArray) {
 		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
 		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
-		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 28 ~ quotes`, quotes);
-		// if (quotes.length) {
-			// quotes.forEach((quote) => {
-			// 	console.log(`🚀 ~ file: QuotesManager.svelte ~ line 39 ~ quotes.forEach ~ quote`, quote)
-			// 	// setTimeout(() => {
-			// 	// 	uploadQuote(quote, "upsertQuote")
-			// 	// }, 100);
-			// });
-		// }
 		storedQuotesArray.set([...$addedQuotes, ...quotes]);
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 	} else {
@@ -48,26 +39,23 @@
 				console.log(`🚀 ~ file: QuotesManager.svelte ~ line 48 ~ dbQuotes TRUE`, dbQuotes);
 				storedQuotesArray.set(dbQuotes.body.dgraph_quotes);
 				filteredQuotes = dbQuotes.body.dgraph_quotes;
-				console.log(
-					`🚀 ~ file: QuotesManager.svelte ~ line 52 ~ dbQuotes.body.dgraph_quotes`,
-					dbQuotes.body.dgraph_quotes
-				);
 			}
 		}
 	}
 
 	async function getQuotesFromDgraph() {
 		dbQuotes = await getAllQuotesFromDB();
-			quotesArray.set(dbQuotes.body.dgraph_quotes);
+		quotesArray.set(dbQuotes.body.dgraph_quotes);
 	}
 
 	$: {
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
-            console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm)
-			filteredQuotes = quotes.filter((quote) =>
-				quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
-				quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
+			console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm);
+			filteredQuotes = quotes.filter(
+				(quote) =>
+					quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
 			);
 		} else {
 			filteredQuotes = [...$addedQuotes, ...$quotesArray];
@@ -84,8 +72,8 @@
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });
-		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page)
-		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page.url)
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page);
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 88 ~ onMount ~ page`, $page.url);
 	});
 
 	function uploadQuote(quote, operationType) {
@@ -117,7 +105,10 @@
 
 	function readFile(input_file) {
 		if (input_file) {
-			console.log(`🚀 ~ file: QuotesManager.svelte ~ line 14 ~ readFile ~ input_file`, input_file[0]);
+			console.log(
+				`🚀 ~ file: QuotesManager.svelte ~ line 14 ~ readFile ~ input_file`,
+				input_file[0]
+			);
 			file = input_file[0];
 			var reader = new FileReader();
 			reader.onload = function (event) {
@@ -255,16 +246,16 @@
 
 <div class=" quotes-wrapper flex flex-col w-full bg-black">
 	<div class="file-and-search-wrapper flex items-start  justify-center mt-12">
-		{#if  $page.url.pathname !== "/"}
-		<div class="fileinput-wrapper ml-12">
-			<input
-				class="input input-primary w-48 p-0 border-2 border-indigo-600"
-				id="fileInput"
-				type="file"
-				bind:files={input_file}
-				on:change={readFile(input_file)}
-			/>
-		</div>
+		{#if $page.url.pathname !== '/'}
+			<div class="fileinput-wrapper ml-12">
+				<input
+					class="input input-primary w-48 p-0 border-2 border-indigo-600"
+					id="fileInput"
+					type="file"
+					bind:files={input_file}
+					on:change={readFile(input_file)}
+				/>
+			</div>
 		{/if}
 		<div class="flex w-full items-center justify-center m-0 ml-8">
 			<input
@@ -277,21 +268,21 @@
 		</div>
 	</div>
 	<div class="flex w-full">
-		{#if  $page.url.pathname !== "/"}
-		{#if addQuoteForm}<AddQuote />
-		{:else}
-			<button class="p-4 rounded bg-indigo-600 m-3" on:click={showAddQuoteForm}
-				>Add New Quote</button
-			>
-		{/if}
+		{#if $page.url.pathname !== '/'}
+			{#if addQuoteForm}<AddQuote />
+			{:else}
+				<button class="p-4 rounded bg-indigo-600 m-3" on:click={showAddQuoteForm}
+					>Add New Quote</button
+				>
+			{/if}
 		{/if}
 	</div>
 
 	<div class="quotes">
 		{#if filteredQuotes.length}
 			{#each filteredQuotes as quote, i}
-			{#if quote.quoteBody}
-				<DisplayQuotes {quote} {i} />
+				{#if quote.quoteBody}
+					<DisplayQuotes {quote} {i} />
 				{/if}
 			{/each}
 		{:else}
@@ -338,11 +329,9 @@
 		font-weight: 300;
 	}
 
-
 	.quote-author {
 		color: rgba(100, 200, 255, 1);
 	}
-
 
 	.quote-mark {
 		font-family: 'Montserrat', serif;

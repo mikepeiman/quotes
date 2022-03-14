@@ -65,6 +65,7 @@
 		"svelte-time": "^0.6.1",
 		"tippy.js": "^6.3.7",
 		"tweakpane": "^3.0.7",
+		"uuid": "^8.3.2",
 		"zimjs": "^12.0.0"
 	}
 }

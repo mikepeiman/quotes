@@ -8,7 +8,7 @@
 	export let quote;
 </script>
 
-<div class="p-10 card bg-slate-800">
+<div class="p-10 card bg-slate-800 w-full">
 	<GetQuotesButtons />
 	<AddQuoteButtons />
 </div>

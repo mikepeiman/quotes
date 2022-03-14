@@ -60,7 +60,7 @@ Great!
 	onMount(() => {});
 </script>
 
-<div class="flex flex-col bg-red-500">
+<div class="flex flex-col w-full">
 	<AddQuoteForm />
 	<QuotesStorageControls />
 </div>
