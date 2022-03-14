@@ -25,7 +25,9 @@
 		fsQuotesArray,
 		dbQuotes,
 		file = false;
-	$: if (fsQuotesArray) {
+	$: if ($quotesArray.length) {
+		filteredQuotes = $quotesArray;
+	} else if (fsQuotesArray) {
 		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
 		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
 		storedQuotesArray.set([...$addedQuotes, ...quotes]);
@@ -68,7 +70,8 @@
 
 		// dbQuotes = await getAllQuotesFromDB();
 		// quotesArray.set(dbQuotes.body.dgraph_quotes);
-		// console.log(`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
+        console.log(`🚀 ~ file: QuotesManager.svelte ~ line 74 ~ onMount ~ $quotesArray`, $quotesArray)
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });

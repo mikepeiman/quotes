@@ -3,6 +3,7 @@ import { dgraph } from "$lib/dgraphClient"
 import { supabase } from "$lib/supabaseClient";
 import { gql, request } from 'graphql-request'
 import { v4 as uuidv4 } from 'uuid';
+
 const quotesFile = writable({})
 const fileContent = writable({})
 export const quotesArray = writable([])
@@ -13,10 +14,14 @@ export const addedQuotes = writable([])
 
 export const addQuote = (quote) => {
     console.log(`🚀 ~ file: quotes.js ~ line 9 ~ addQuote ~ quote`, quote)
-    if(!quote.id){
+    if (!quote.id) {
+        console.log(`🚀 ~ file: quotes.js ~ line 17 ~ addQuote ~ addedQuotes inside id check: `, get(addedQuotes), ` --- QUOTE: `, quote)
         quote.id = uuidv4()
     }
-    addedQuotes.update((cur) => [...cur, quote])
+    let exists = checkIfQuoteExists(quote)
+    exists ? console.log(`🚀 ~ file: quotes.js ~ line 21 ~ addQuote ~ quote exists`) : console.log(`🚀 ~ file: quotes.js ~ line 23 ~ addQuote ~ quote does not exist`)
+    !exists ? addedQuotes.update((cur) => [...cur, quote]) : false;
+    console.log(`🚀 ~ file: quotes.js ~ line 17 ~ addQuote ~ addedQuotes after update: `, get(addedQuotes))
     console.log(`🚀 ~ file: quotes.js ~ line 11 ~ addQuote ~ addedQuotes`, addedQuotes)
 }
 
@@ -29,15 +34,15 @@ export const uploadQuote = async (quote) => {
           }`
     console.log(`🚀 ~file: quotes.js ~line 19 ~uploadQuote ~query`, query)
     try {
-    await dgraph.request(query).then((data) => {
-        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitdgraph.request ~ data`, data)
-        dgraph_quotes = data.queryQuote
-        console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitdgraph.request ~ dgraph_quotes`, dgraph_quotes)
-    })
-    return {
-        status: 200,
-        body: { dgraph_quotes }
-    }
+        await dgraph.request(query).then((data) => {
+            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 18 ~ awaitdgraph.request ~ data`, data)
+            dgraph_quotes = data.queryQuote
+            console.log(`🚀 ~ file: index.dgraph.json.js ~ line 19 ~ awaitdgraph.request ~ dgraph_quotes`, dgraph_quotes)
+        })
+        return {
+            status: 200,
+            body: { dgraph_quotes }
+        }
     } catch (error) {
         return {
             body: { error: 'There was a server error' }
@@ -46,12 +51,13 @@ export const uploadQuote = async (quote) => {
 }
 
 export const deleteQuote = (id) => {
-    addedQuotes.update((cur) => {
-        const newQuotes = cur.filter(quote => quote.id !== id)
-        console.log(`🚀 ~ file: quotes.js ~ line 47 ~ addedQuotes.update ~ newQuotes`, newQuotes)
-        addedQuotes.set(newQuotes)
-        return newQuotes
-    })
+    console.log(`🚀 ~ file: quotes.js ~ line 55 ~ deleteQuote ~ quotesArray`, get(quotesArray))
+    quotesArray.update((cur) => cur.filter((quote) => quote.id !== id))
+    storedQuotesArray.set(get(quotesArray))
+    console.log(`🚀 ~ file: quotes.js ~ line 55 ~ deleteQuote ~ quotesArray`, get(quotesArray))
+    console.log(`🚀 ~ file: quotes.js ~ line 57 ~ deleteQuote ~ addedQuotes`, get(addedQuotes))
+    addedQuotes.update((cur) => cur.filter((quote) => quote.id !== id))
+    console.log(`🚀 ~ file: quotes.js ~ line 57 ~ deleteQuote ~ addedQuotes`, get(addedQuotes))
 }
 
 export const getAllQuotesFromDB = async () => {
@@ -119,3 +125,17 @@ export const storeCurrentQuote = {
         return localStorage.getItem("currentQuote");
     }
 };
+
+function checkIfQuoteExists(quote) {
+    let quotes = get(quotesArray)
+    console.log(`🚀 ~ file: quotes.js ~ line 111 ~ checkIfQuoteExists ~ quotes`, quotes)
+    for (let i = 0; i < quotes.length; i++) {
+        let q = quotes[i]
+        if (q.quoteBody === quote.quoteBody && q.author.name === quote.author.name) {
+            console.log(`🚀 ~ file: quotes.js ~ line 116 ~ checkIfQuoteExists ~ q.quoteBody === quote.quoteBody`, q.quoteBody === quote.quoteBody)
+            return true
+        }
+        break
+    }
+    return false
+}
