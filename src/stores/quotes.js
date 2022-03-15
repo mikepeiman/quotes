@@ -20,10 +20,8 @@ export const addQuote = (quote) => {
     }
     let exists = checkIfQuoteExists(quote)
     exists ? console.log(`🚀 ~ file: quotes.js ~ line 21 ~ addQuote ~ quote exists`) : console.log(`🚀 ~ file: quotes.js ~ line 23 ~ addQuote ~ quote does not exist`)
-    // !exists ? addedQuotes.update((cur) => [quote, ...cur]) : false;
     !exists ? quotesArray.update((cur) => [quote, ...cur]) : false;
-    console.log(`🚀 ~ file: quotes.js ~ line 17 ~ addQuote ~ addedQuotes after update: `, get(addedQuotes))
-    console.log(`🚀 ~ file: quotes.js ~ line 11 ~ addQuote ~ addedQuotes`, addedQuotes)
+    storedQuotesArray.set(get(quotesArray))
 }
 
 export const uploadQuote = async (quote) => {
@@ -52,17 +50,30 @@ export const uploadQuote = async (quote) => {
 }
 
 export const deleteQuote = (q) => {
-console.log(`🚀 ~ file: quotes.js ~ line 54 ~ deleteQuote ~ id`, q.id)
-if(q.id){
-    quotesArray.update((cur) => cur.filter((quote) => quote.id !== q.id))
-    storedQuotesArray.set(get(quotesArray))
-    addedQuotes.update((cur) => cur.filter((quote) => quote.id !== q.id))
-} else {
-    let quotes = get(quotesArray)
-    // filter quotes array and remove quote with matching quoteBody and author.name
-    quotesArray.update(cur => cur.filter((quote) => quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name))
-    // storedQuotesArray.set(quotes.filter((quote) => quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name))
-}
+    console.log(`🚀 ~ file: quotes.js ~ line 54 ~ deleteQuote ~ id`, q.id, q.quoteBody)
+    if (q.id) {
+        quotesArray.update((cur) => cur.filter((quote) => quote.id !== q.id))
+        storedQuotesArray.set(get(quotesArray))
+        addedQuotes.update((cur) => cur.filter((quote) => quote.id !== q.id))
+    } else {
+
+        // filter quotes array and remove quote with matching quoteBody and author.name
+
+        let quotes = get(quotesArray)
+        let len = quotes.length
+        console.log(`🚀 ~ file: quotes.js ~ line 67 ~ deleteQuote ~ len`, len)
+        quotes.filter(quote => {
+            return quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name
+        })
+        len = quotes.length
+        console.log(`🚀 ~ file: quotes.js ~ line 72 ~ deleteQuote ~ len after filter`, len)
+
+
+        // quotesArray.update(cur => cur.filter((quote) => (quote.quoteBody != q.quoteBody && quote.author.name != q.author.name)))
+        quotesArray.update(cur => cur.filter((quote) => (quote.quoteBody !== q.quoteBody)))
+        storedQuotesArray.set(get(quotesArray))
+        // storedQuotesArray.set(quotes.filter((quote) => quote.quoteBody !== q.quoteBody && quote.author.name !== q.author.name))
+    }
 
 }
 
@@ -141,7 +152,7 @@ function checkIfQuoteExists(quote) {
         let q = quotes[i]
         let x = quotes[100]
         console.log(`🚀 ~ file: quotes.js ~ line 142 ~ checkIfQuoteExists ~ x`, x)
-        if (q.quoteBody == quote.quoteBody) {
+        if (q.quoteBody == quote.quoteBody && q.author.name == quote.author.name) {
             console.log(`🚀 ~ file: quotes.js ~ line 141 ~ checkIfQuoteExists ~ quote.author.name`, quote.author.name)
             console.log(`🚀 ~ file: quotes.js ~ line 141 ~ checkIfQuoteExists ~ quote.quoteBody`, quote.quoteBody)
             console.log(`🚀 ~ file: quotes.js ~ line 116 ~ checkIfQuoteExists ~ q.quoteBody === quote.quoteBody`, q.quoteBody === quote.quoteBody)

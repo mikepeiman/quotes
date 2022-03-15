@@ -55,7 +55,7 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
 			console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm);
-			filteredQuotes = quotes.filter(
+		 filteredQuotes =	filteredQuotes.filter(
 				(quote) =>
 					quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
 					quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())

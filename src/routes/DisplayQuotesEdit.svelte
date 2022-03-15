@@ -11,11 +11,8 @@
 		delete: 'fluent:delete-dismiss-20-filled'
 	};
 
-	let edit = false
-
 	const handleEdit = (i) => {
 		console.log(`edit ${i}`);
-		edit = !edit
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 3 ~ quote`, quote);
 	};
 
@@ -87,7 +84,6 @@
 >
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		{edit}
 		{#if $page.url.pathname !== '/'}
 			<div class="flex">
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
@@ -131,14 +127,14 @@
 	<div class="flex flex-col justify-items-start place-items-start">
 		<!-- <h1 class="badge badge-xl badge-success">{quote.author}</h1> -->
 		<label class="input-group input-group-xs">
-			<span class="bg-slate-900">Author</span>
+			<input class="bg-slate-900">Author</input>
 			<span class="badge badge-success bg-slate-900 text-sky-300 input-xs"
 				>{quote.author.name ? quote.author.name : quote.author}</span
 			>
 		</label>
 		{#if quote.author.title}
 			<label class="input-group input-group-xs">
-				<span class="bg-slate-900">Title</span>
+				<input class="bg-slate-900">Title</input>
 				<span class="badge badge-success bg-slate-900 text-sky-400 input-xs"
 					>{quote.author.title}</span
 				>
@@ -154,7 +150,7 @@
 		{/if} -->
 		{#if quote.date}
 			<label class="input-group input-group-xs rounded-none">
-				<span class="bg-slate-900 rounded-none">Date</span>
+				<input class="bg-slate-900 rounded-none">Date</input>
 				<span class="rounded-none badge badge-info bg-slate-900 text-gray-400 input-xs"
 					>{quote.date}</span
 				>
@@ -162,7 +158,7 @@
 		{/if}
 		{#if quote.source}
 			<label class="input-group input-group-xs rounded-none">
-				<span class="bg-slate-900 rounded-none">Source</span>
+				<input class="bg-slate-900 rounded-none">Source</input>
 				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
 					>{quote.source}</span
 				>
@@ -170,7 +166,7 @@
 		{/if}
 		{#if quote.tags?.length}
 			<label class="input-group input-group-xs rounded-none">
-				<span class="bg-slate-900 rounded-none">Tags</span>
+				<input class="bg-slate-900 rounded-none">Tags</input>
 				{#each quote.tags as tag}
 					<span
 						class="rounded-none badge badge-warning input-xs bg-slate-600 mx-1 text-sky-500 input-xs"
@@ -181,7 +177,7 @@
 		{/if}
 		{#if quote.context}
 			<label class="input-group input-group-xs rounded-none">
-				<span class="bg-slate-900 rounded-none">Context</span>
+				<input class="bg-slate-900 rounded-none">Context</input>
 				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
 					>{quote.context}</span
 				>
