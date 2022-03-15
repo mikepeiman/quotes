@@ -26,7 +26,7 @@
 		dbQuotes,
 		file = false;
 	$: if ($quotesArray.length) {
-		filteredQuotes = $quotesArray;
+		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 	} else if (fsQuotesArray) {
 		filteredQuotes = quotes = JSON.parse(fsQuotesArray);
 		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 30 ~ fsQuotesArray TRUE `, filteredQuotes);
@@ -288,6 +288,8 @@
 					<DisplayQuotes {quote} {i} />
 				{/if}
 			{/each}
+		{:else if $quotesArray.length || $addedQuotes.length}
+			No results include that search term
 		{:else}
 			loading...
 		{/if}
