@@ -10,8 +10,9 @@
 	import { onMount } from 'svelte';
 	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
-	import AddQuote from './AddQuote.svelte';
+
 	import { page } from '$app/stores';
+import AddQuoteForm from './add/AddQuoteForm.svelte';
 
 	export let filteredQuotes = [];
 
@@ -272,7 +273,8 @@
 	</div>
 	<div class="flex w-full">
 		{#if $page.url.pathname !== '/'}
-			{#if addQuoteForm}<AddQuote />
+			{#if addQuoteForm}
+			<AddQuoteForm />
 			{:else}
 				<button class="p-4 rounded bg-indigo-600 m-3" on:click={showAddQuoteForm}
 					>Add New Quote</button

@@ -19,30 +19,8 @@ Great!
 	export let quotes, dgraph_quotes;
 	let quoteBody, authorName, authorTitle, context, tags, source, originalText;
 	const handleSubmit = (db) => {
-		console.log(`🚀 ~ file: index.svelte ~ line 21 ~ handleSubmit clicked 💎💎💎~ db`, db);
-		originalText = `${quoteBody} - ${authorName}, ${authorTitle} @(${context}), #(${tags}), [${source}]`;
-		console.log(
-			`🚀 ~ file: AddQuoteButtons.svelte ~ line 22 ~ handleSubmit ~ originalText`,
-			originalText
-		);
-		console.log(`🚀 ~ file: AddQuote.svelte ~ line 14 ~ handleSubmit ~ tags`, tags, typeof tags);
-		if (tags && typeof tags === 'string') {
-			tags = tags.split(',').map((tag) => tag.trim());
-		}
-		// tags ? (tags = tags.split(',').map((tag) => tag.trim())) : tags;
-		// (tags && !tags instanceof Array) ? (tags = tags.split(',').map((tag) => tag.trim())) : null;
-		console.log(`🚀 ~ file: AddQuote.svelte ~ line 16 ~ handleSubmit ~ tags`, tags);
-		let quote = {
-			originalText,
-			quoteBody,
-			author: {
-				name: authorName,
-				title: authorTitle
-			},
-			context,
-			tags,
-			source
-		};
+    console.log(`🚀 ~ file: AddQuoteButtons.svelte ~ line 22 ~ handleSubmit ~ db`, db)
+		let quote = getCurrentValues()
 		addQuote(quote);
 		// uploadQuote(quote);
 	};
@@ -111,6 +89,63 @@ Great!
 		for (const textareaElement of textareaElements) {
 			new TextareaAutoResize(textareaElement);
 		}
+	}
+
+	// function to get current values from form
+	function getCurrentValues() {
+		let fieldQuoteBody = document.getElementById('quoteBody');
+		let fieldAuthorName = document.getElementById('authorName');
+		let fieldAuthorTitle = document.getElementById('authorTitle');
+		let fieldContext = document.getElementById('context');
+		let fieldTags = document.getElementById('tags');
+		let fieldSource = document.getElementById('source');
+		quoteBody = fieldQuoteBody.value;
+		authorName = fieldAuthorName.value;
+		authorTitle = fieldAuthorTitle.value;
+		context = fieldContext.value;
+		tags = fieldTags.value;
+		source = fieldSource.value;
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ quoteBody`,
+			quoteBody
+		);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ authorName`,
+			authorName
+		);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ authorTitle`,
+			authorTitle
+		);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ context`,
+			context
+		);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ tags`,
+			tags
+		);
+		console.log(
+			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ source`,
+			source
+		);
+		originalText = `${quoteBody} - ${authorName}, ${authorTitle} @(${context}), #(${tags}), [${source}]`;
+		if (tags && typeof tags === 'string') {
+			tags = tags.split(',').map((tag) => tag.trim());
+		}
+
+		let quote = {
+			originalText,
+			quoteBody,
+			author: {
+				name: authorName,
+				title: authorTitle
+			},
+			context,
+			tags,
+			source
+		};
+		return quote
 	}
 
 	function endpoint() {

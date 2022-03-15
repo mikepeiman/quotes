@@ -20,7 +20,7 @@ export const addQuote = (quote) => {
     }
     let exists = checkIfQuoteExists(quote)
     exists ? console.log(`🚀 ~ file: quotes.js ~ line 21 ~ addQuote ~ quote exists`) : console.log(`🚀 ~ file: quotes.js ~ line 23 ~ addQuote ~ quote does not exist`)
-    !exists ? addedQuotes.update((cur) => [...cur, quote]) : false;
+    !exists ? addedQuotes.update((cur) => [quote, ...cur]) : false;
     console.log(`🚀 ~ file: quotes.js ~ line 17 ~ addQuote ~ addedQuotes after update: `, get(addedQuotes))
     console.log(`🚀 ~ file: quotes.js ~ line 11 ~ addQuote ~ addedQuotes`, addedQuotes)
 }
