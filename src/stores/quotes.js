@@ -20,7 +20,8 @@ export const addQuote = (quote) => {
     }
     let exists = checkIfQuoteExists(quote)
     exists ? console.log(`🚀 ~ file: quotes.js ~ line 21 ~ addQuote ~ quote exists`) : console.log(`🚀 ~ file: quotes.js ~ line 23 ~ addQuote ~ quote does not exist`)
-    !exists ? addedQuotes.update((cur) => [quote, ...cur]) : false;
+    // !exists ? addedQuotes.update((cur) => [quote, ...cur]) : false;
+    !exists ? quotesArray.update((cur) => [quote, ...cur]) : false;
     console.log(`🚀 ~ file: quotes.js ~ line 17 ~ addQuote ~ addedQuotes after update: `, get(addedQuotes))
     console.log(`🚀 ~ file: quotes.js ~ line 11 ~ addQuote ~ addedQuotes`, addedQuotes)
 }
@@ -132,15 +133,23 @@ export const storeCurrentQuote = {
 };
 
 function checkIfQuoteExists(quote) {
+    console.log(`🚀 ~ file: quotes.js ~ line 135 ~ checkIfQuoteExists ~ quote`, quote)
+    let foundMatch = false
     let quotes = get(quotesArray)
     console.log(`🚀 ~ file: quotes.js ~ line 111 ~ checkIfQuoteExists ~ quotes`, quotes)
     for (let i = 0; i < quotes.length; i++) {
         let q = quotes[i]
-        if (q.quoteBody === quote.quoteBody && q.author.name === quote.author.name) {
+        let x = quotes[100]
+        console.log(`🚀 ~ file: quotes.js ~ line 142 ~ checkIfQuoteExists ~ x`, x)
+        if (q.quoteBody == quote.quoteBody) {
+            console.log(`🚀 ~ file: quotes.js ~ line 141 ~ checkIfQuoteExists ~ quote.author.name`, quote.author.name)
+            console.log(`🚀 ~ file: quotes.js ~ line 141 ~ checkIfQuoteExists ~ quote.quoteBody`, quote.quoteBody)
             console.log(`🚀 ~ file: quotes.js ~ line 116 ~ checkIfQuoteExists ~ q.quoteBody === quote.quoteBody`, q.quoteBody === quote.quoteBody)
+            foundMatch = true
+            console.log(`🚀 ~ file: quotes.js ~ line 143 ~ checkIfQuoteExists ~ foundMatch`, foundMatch)
             return true
         }
         break
     }
-    return false
+    return foundMatch
 }

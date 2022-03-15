@@ -105,30 +105,6 @@ Great!
 		context = fieldContext.value;
 		tags = fieldTags.value;
 		source = fieldSource.value;
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ quoteBody`,
-			quoteBody
-		);
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ authorName`,
-			authorName
-		);
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ authorTitle`,
-			authorTitle
-		);
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ context`,
-			context
-		);
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ tags`,
-			tags
-		);
-		console.log(
-			`🚀 ~ file: AddQuote.svelte ~ line 42 ~ getCurrentValues ~ source`,
-			source
-		);
 		originalText = `${quoteBody} - ${authorName}, ${authorTitle} @(${context}), #(${tags}), [${source}]`;
 		if (tags && typeof tags === 'string') {
 			tags = tags.split(',').map((tag) => tag.trim());
