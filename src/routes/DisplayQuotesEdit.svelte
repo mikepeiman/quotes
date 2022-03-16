@@ -10,9 +10,10 @@
 		upsert: 'clarity:upload-outline-badged',
 		delete: 'fluent:delete-dismiss-20-filled'
 	};
-
+    let edit = true
 	const handleEdit = (i) => {
 		console.log(`edit ${i}`);
+		edit = !edit
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 3 ~ quote`, quote);
 	};
 
@@ -78,7 +79,7 @@
 		deleteQuote(quote)
 	}
 </script>
-
+{#if edit}
 <div
 	class="card quote p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
@@ -117,9 +118,7 @@
 		>
 	</label> -->
 	<h1 class="quote-body p-8 text-2xl">
-		<span class="quote-mark text-sky-300">&ldquo;</span>{@html quote.quoteBody}<span
-			class="quote-mark text-sky-300">&rdquo;</span
-		>
+		<textarea class="quote-mark text-sky-300" bind:value={quote.quoteBody} />
 		<span class="quote-author text-sky-300"
 			>~ {quote.author?.name ? quote.author.name : quote.author}</span
 		>
@@ -127,14 +126,14 @@
 	<div class="flex flex-col justify-items-start place-items-start">
 		<!-- <h1 class="badge badge-xl badge-success">{quote.author}</h1> -->
 		<label class="input-group input-group-xs">
-			<input class="bg-slate-900">Author</input>
+			<input class="bg-slate-900">Author
 			<span class="badge badge-success bg-slate-900 text-sky-300 input-xs"
 				>{quote.author.name ? quote.author.name : quote.author}</span
 			>
 		</label>
 		{#if quote.author.title}
 			<label class="input-group input-group-xs">
-				<input class="bg-slate-900">Title</input>
+				<input class="bg-slate-900">Title
 				<span class="badge badge-success bg-slate-900 text-sky-400 input-xs"
 					>{quote.author.title}</span
 				>
@@ -150,7 +149,7 @@
 		{/if} -->
 		{#if quote.date}
 			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none">Date</input>
+				<input class="bg-slate-900 rounded-none">Date
 				<span class="rounded-none badge badge-info bg-slate-900 text-gray-400 input-xs"
 					>{quote.date}</span
 				>
@@ -158,7 +157,7 @@
 		{/if}
 		{#if quote.source}
 			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none">Source</input>
+				<input class="bg-slate-900 rounded-none">Source
 				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
 					>{quote.source}</span
 				>
@@ -166,7 +165,7 @@
 		{/if}
 		{#if quote.tags?.length}
 			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none">Tags</input>
+				<input class="bg-slate-900 rounded-none">Tags
 				{#each quote.tags as tag}
 					<span
 						class="rounded-none badge badge-warning input-xs bg-slate-600 mx-1 text-sky-500 input-xs"
@@ -177,7 +176,7 @@
 		{/if}
 		{#if quote.context}
 			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none">Context</input>
+				<input class="bg-slate-900 rounded-none">Context
 				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
 					>{quote.context}</span
 				>
@@ -202,7 +201,7 @@
     {/if} -->
 	</div>
 </div>
-
+{/if}
 <style lang="scss">
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 

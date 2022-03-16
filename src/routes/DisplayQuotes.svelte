@@ -3,6 +3,7 @@
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
 	import { deleteQuote} from '$stores/quotes';
+	import DisplayQuotesEdit from './DisplayQuotesEdit.svelte';
 	let icons = {
 		edit: 'akar-icons:edit',
 		question: 'akar-icons:question',
@@ -82,6 +83,9 @@
 	}
 </script>
 
+{#if edit}
+<DisplayQuotesEdit {quote} {i} />
+{:else}
 <div
 	class="card quote p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
@@ -114,12 +118,7 @@
 			</div>
 		{/if}
 	</div>
-	<!-- <label class="input-group input-group-xs rounded-none">
-		<span class="bg-slate-900 rounded-none">Original</span>
-		<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
-			>{quote.originalText}</span
-		>
-	</label> -->
+
 	<h1 class="quote-body p-8 text-2xl">
 		<span class="quote-mark text-sky-300">&ldquo;</span>{@html quote.quoteBody}<span
 			class="quote-mark text-sky-300">&rdquo;</span
@@ -144,14 +143,6 @@
 				>
 			</label>
 		{/if}
-		<!-- {#if quote.authorTitle && quote.authorTitle.length}
-			<label class="input-group input-group-xs">
-				<span class="bg-slate-900">AuthorTitle</span>
-				<span class="font-sans text-sm bg-black rounded-sm mx-1 text-fuchsia-400 input-xs"
-					>{quote.authorTitle}</span
-				>
-			</label>
-		{/if} -->
 		{#if quote.date}
 			<label class="input-group input-group-xs rounded-none">
 				<span class="bg-slate-900 rounded-none">Date</span>
@@ -187,25 +178,9 @@
 				>
 			</label>
 		{/if}
-		<!-- {#if quote.details?.length}
-        DETAILS
-        {#each quote.details as detail}
-            {#if detail.type !== 'undefined'}
-                <label class="input-group input-group-xs rounded-none">
-                    <span class="bg-slate-900 rounded-none">{detail.type}</span>
-                    <span class="rounded-none badge badge-info input-xs">{detail.value}</span>
-                </label>
-            {/if}
-        {/each}
-    {/if}
-    {#if quote.remainingText?.length}
-        <label class="input-group input-group-xs rounded-none">
-            <span class="bg-slate-900 rounded-none">remainingText: </span>
-            <span class="rounded-none badge badge-info input-xs">{quote.remainingText}</span>
-        </label>
-    {/if} -->
 	</div>
 </div>
+{/if}
 
 <style lang="scss">
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
