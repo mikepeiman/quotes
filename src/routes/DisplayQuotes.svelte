@@ -2,14 +2,14 @@
 	export let quote, i;
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
-	import { deleteQuote} from '$stores/quotes';
+	import { deleteQuote } from '$stores/quotes';
 	import DisplayQuotesEdit from './DisplayQuotesEdit.svelte';
-	import { fade,  blur, fly, slide, scale, crossfade } from 'svelte/transition';
-	import { flip } from 'svelte/animate'; 
+	import { fade, blur, fly, slide, scale, crossfade } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 	import { quintOut } from 'svelte/easing';
 
 	const [send, receive] = crossfade({
-		duration: d => Math.sqrt(d * 200),
+		duration: (d) => Math.sqrt(d * 200),
 
 		fallback(node, params) {
 			const style = getComputedStyle(node);
@@ -18,7 +18,7 @@
 			return {
 				duration: 600,
 				easing: quintOut,
-				css: t => `
+				css: (t) => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
 				`
@@ -30,15 +30,15 @@
 		edit: 'akar-icons:edit',
 		question: 'akar-icons:question',
 		upload: 'ant-design:cloud-upload-outlined',
-		upsert: 'clarity:upload-outline-badged',
+		upsert: 'clarity:upload-outline-d',
 		delete: 'fluent:delete-dismiss-20-filled'
 	};
 
-	let edit = false
+	let edit = false;
 
 	const handleEdit = (i) => {
 		console.log(`edit ${i}`);
-		edit = !edit
+		edit = !edit;
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 3 ~ quote`, quote);
 	};
 
@@ -100,104 +100,13 @@
 	}
 
 	function deleteQ() {
-		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ deleteQuote ~ quote, i`, quote, i)
-		deleteQuote(quote)
+		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ deleteQuote ~ quote, i`, quote, i);
+		deleteQuote(quote);
 	}
 </script>
 
-{#if edit}
 <div
-	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
->
-	<div class="flex justify-between">
-		<div class="count badge bg-gray-700">{i + 1}</div>
-		{#if $page.url.pathname !== '/'}
-			<div class="flex">
-				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
-					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1" />
-				</div>
-				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
-					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1" />
-				</div>
-				<div
-					class="edit-quote hover:cursor-pointer"
-					on:click={() => uploadQuote(quote, 'addQuote')}
-				>
-					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1" />
-				</div>
-				<div
-					class="edit-quote hover:cursor-pointer"
-					on:click={() => uploadQuote(quote, 'upsertQuote')}
-				>
-					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
-				</div>
-				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
-					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1" />
-				</div>
-			</div>
-		{/if}
-	</div>
-	<h1 class="quote-body p-8 text-2xl">
-		<textarea class="quote-mark text-sky-300" bind:value={quote.quoteBody} />
-		<span class="quote-author text-sky-300"
-			>~ {quote.author?.name ? quote.author.name : quote.author}</span
-		>
-	</h1>
-	<div class="flex flex-col justify-items-start place-items-start">
-		<label class="input-group input-group-xs">
-			<input class="bg-slate-900" />Author
-			<span class="badge badge-success bg-slate-900 text-sky-300 input-xs"
-				>{quote.author.name ? quote.author.name : quote.author}</span
-			>
-		</label>
-		{#if quote.author.title}
-			<label class="input-group input-group-xs">
-				<input class="bg-slate-900" />Title
-				<span class="badge badge-success bg-slate-900 text-sky-400 input-xs"
-					>{quote.author.title}</span
-				>
-			</label>
-		{/if}
-		{#if quote.date}
-			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none" />Date
-				<span class="rounded-none badge badge-info bg-slate-900 text-gray-400 input-xs"
-					>{quote.date}</span
-				>
-			</label>
-		{/if}
-		{#if quote.source}
-			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none" />Source
-				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
-					>{quote.source}</span
-				>
-			</label>
-		{/if}
-		{#if quote.tags?.length}
-			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none" />Tags
-				{#each quote.tags as tag}
-					<span
-						class="rounded-none badge badge-warning input-xs bg-slate-600 mx-1 text-sky-500 input-xs"
-						>{tag}</span
-					>
-				{/each}
-			</label>
-		{/if}
-		{#if quote.context}
-			<label class="input-group input-group-xs rounded-none">
-				<input class="bg-slate-900 rounded-none" />Context
-				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
-					>{quote.context}</span
-				>
-			</label>
-		{/if}
-	</div>
-</div>
-{:else}
-<div
-transition:scale={{duration: 100, easing: quintOut}}
+	transition:scale={{ duration: 100, easing: quintOut }}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
 	<div class="flex justify-between">
@@ -230,69 +139,71 @@ transition:scale={{duration: 100, easing: quintOut}}
 	</div>
 
 	<h1 class="quote-body p-8 text-2xl">
-		<span class="quote-mark text-sky-300">&ldquo;</span>{@html quote.quoteBody}<span
-			class="quote-mark text-sky-300">&rdquo;</span
-		>
-		<span class="quote-author text-sky-300"
+		<span class="quote-mark text-sky-300" id="{quote.id}-quoteBody">&ldquo;</span
+		>{@html quote.quoteBody}<span class="quote-mark text-sky-300">&rdquo;</span>
+		<span class="quote-author text-sky-300" id="{quote.id}-quoteBody"
 			>~ {quote.author?.name ? quote.author.name : quote.author}</span
 		>
 	</h1>
 	<div class="flex flex-col justify-items-start place-items-start">
-		<!-- <h1 class="badge badge-xl badge-success">{quote.author}</h1> -->
-		<label class="input-group input-group-xs">
+		<label class="quote-details">
 			<span class="bg-slate-900">Author</span>
-			<span class="badge badge-success bg-slate-900 text-sky-300 input-xs"
+			<span class=" bg-slate-900 text-sky-300 " id="{quote.id}-authorName"
 				>{quote.author.name ? quote.author.name : quote.author}</span
 			>
 		</label>
 		{#if quote.author.title}
-			<label class="input-group input-group-xs">
+			<label class="quote-details">
 				<span class="bg-slate-900">Title</span>
-				<span class="badge badge-success bg-slate-900 text-sky-400 input-xs"
+				<span class=" bg-slate-900 text-sky-400 " id="{quote.id}-authorTitle"
 					>{quote.author.title}</span
 				>
 			</label>
 		{/if}
 		{#if quote.date}
-			<label class="input-group input-group-xs rounded-none">
+			<label class="quote-details">
 				<span class="bg-slate-900 rounded-none">Date</span>
-				<span class="rounded-none badge badge-info bg-slate-900 text-gray-400 input-xs"
+				<span class="rounded-none   bg-slate-900 text-gray-400 " id="{quote.id}-date"
 					>{quote.date}</span
 				>
 			</label>
 		{/if}
 		{#if quote.source}
-			<label class="input-group input-group-xs rounded-none">
+			<label class="quote-details">
 				<span class="bg-slate-900 rounded-none">Source</span>
-				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
+				<span class="rounded-none    bg-slate-900 text-sky-500 " id="{quote.id}-source"
 					>{quote.source}</span
 				>
 			</label>
 		{/if}
 		{#if quote.tags?.length}
-			<label class="input-group input-group-xs rounded-none">
+			<label class="quote-details">
 				<span class="bg-slate-900 rounded-none">Tags</span>
-				{#each quote.tags as tag}
-					<span
-						class="rounded-none badge badge-warning input-xs bg-slate-600 mx-1 text-sky-500 input-xs"
-						>{tag}</span
-					>
-				{/each}
+				<span class="bg-transparent p-0 rounded-none" id="{quote.id}-tags">
+					{#each quote.tags as tag}
+						<span class="rounded-sm bg-slate-700 mx-1 text-sky-500 p-1 ">{tag}</span>
+					{/each}
+				</span>
 			</label>
 		{/if}
 		{#if quote.context}
-			<label class="input-group input-group-xs rounded-none">
+			<label class="quote-details">
 				<span class="bg-slate-900 rounded-none">Context</span>
-				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
+				<span class="rounded-none    bg-slate-900 text-sky-500 " id="{quote.id}-context"
 					>{quote.context}</span
 				>
 			</label>
 		{/if}
 	</div>
 </div>
-{/if}
 
 <style lang="scss">
+	.quote-details {
+		display: grid;
+		grid-template-columns: 8ch auto;
+		width: 100%;
+		font-size: .75rem;
+	}
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
 	// font-family: 'Allura', cursive;
