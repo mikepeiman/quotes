@@ -42,20 +42,47 @@
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 3 ~ quote`, quote);
 		// query all quote elements with ids
 		let thisQuote = document.getElementById(`${quote.id}`);
-        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 45 ~ handleEdit ~ thisQuote`, thisQuote)
+		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 45 ~ handleEdit ~ thisQuote`, thisQuote);
 		let quote_elements = thisQuote.querySelectorAll('.quote-info');
+		edit ? injectInputFields(quote_elements) : replaceQuoteDetails(quote_elements);
+	};
+
+	const injectInputFields = (quote_elements) => {
 		quote_elements.forEach((quote_element) => {
-			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, quote_element);
-			quote_element.animate(
-				{
-					opacity: 0
-				},
-				{
-					duration: 300,
-					easing: 'ease-in-out'
-				}
-			);
+			let w = quote_element.clientWidth;
+			let h = quote_element.clientHeight;
+			let inputEl = document.createElement('input');
+			// inputEl.classList.add('bg-red-500');
+			inputEl.style.width = `100%`;
+			inputEl.style.height = `${h + 8}px`;
+			inputEl.style.margin = `.5rem`;
+			inputEl.style.border = `none`;
+			inputEl.style.background = `transparent`;
+			inputEl.style.color = `white`;
+			inputEl.style.outline = `none`;
+			inputEl.style.borderBottom = `1px solid white`;
+			inputEl.value = quote_element.innerText;
+
+			// quote_element.parentNode.insertBefore(inputEl, quote_element);
+			quote_element.parentNode.replaceChild(inputEl, quote_element);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, w, h, quote_element);
+			// quote_element.animate(
+			// 	{
+			// 		opacity: 0
+			// 	},
+			// 	{
+			// 		duration: 300,
+			// 		easing: 'ease-in-out'
+			// 	}
+			// );
 		});
+	};
+
+	const replaceQuoteDetails = (quote_elements) => {
+		console.log(
+			`🚀 ~ file: DisplayQuotes.svelte ~ line 74 ~ replaceQuoteDetails ~ quote_elements`,
+			quote_elements
+		);
 	};
 
 	const handleQuery = (i) => {
@@ -122,7 +149,7 @@
 </script>
 
 <div
-id="{quote.id}"
+	id={quote.id}
 	transition:scale={{ duration: 100, easing: quintOut }}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
@@ -219,8 +246,9 @@ id="{quote.id}"
 		display: grid;
 		grid-template-columns: 8ch auto;
 		width: 100%;
-		font-size: .75rem;
+		font-size: 0.75rem;
 		background: none;
+		align-items: center;
 	}
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
