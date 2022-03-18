@@ -40,6 +40,22 @@
 		console.log(`edit ${i}`);
 		edit = !edit;
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 3 ~ quote`, quote);
+		// query all quote elements with ids
+		let thisQuote = document.getElementById(`${quote.id}`);
+        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 45 ~ handleEdit ~ thisQuote`, thisQuote)
+		let quote_elements = thisQuote.querySelectorAll('.quote-info');
+		quote_elements.forEach((quote_element) => {
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, quote_element);
+			quote_element.animate(
+				{
+					opacity: 0
+				},
+				{
+					duration: 300,
+					easing: 'ease-in-out'
+				}
+			);
+		});
 	};
 
 	const handleQuery = (i) => {
@@ -106,6 +122,7 @@
 </script>
 
 <div
+id="{quote.id}"
 	transition:scale={{ duration: 100, easing: quintOut }}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
@@ -147,39 +164,39 @@
 	</h1>
 	<div class="flex flex-col justify-items-start place-items-start">
 		<label class="quote-details">
-			<span class="bg-slate-900">Author</span>
-			<span class=" bg-slate-900 text-sky-300 " id="{quote.id}-authorName"
+			<span class="bg-custom">Author</span>
+			<span class="quote-info bg-custom text-sky-300 " id="{quote.id}-authorName"
 				>{quote.author.name ? quote.author.name : quote.author}</span
 			>
 		</label>
 		{#if quote.author.title}
 			<label class="quote-details">
-				<span class="bg-slate-900">Title</span>
-				<span class=" bg-slate-900 text-sky-400 " id="{quote.id}-authorTitle"
+				<span class="bg-custom">Title</span>
+				<span class="quote-info  bg-custom text-sky-400 " id="{quote.id}-authorTitle"
 					>{quote.author.title}</span
 				>
 			</label>
 		{/if}
 		{#if quote.date}
 			<label class="quote-details">
-				<span class="bg-slate-900 rounded-none">Date</span>
-				<span class="rounded-none   bg-slate-900 text-gray-400 " id="{quote.id}-date"
+				<span class="bg-custom rounded-none">Date</span>
+				<span class="quote-info rounded-none bg-custom text-gray-400 " id="{quote.id}-date"
 					>{quote.date}</span
 				>
 			</label>
 		{/if}
 		{#if quote.source}
 			<label class="quote-details">
-				<span class="bg-slate-900 rounded-none">Source</span>
-				<span class="rounded-none    bg-slate-900 text-sky-500 " id="{quote.id}-source"
+				<span class="bg-custom rounded-none">Source</span>
+				<span class="quote-info rounded-none bg-custom text-sky-500 " id="{quote.id}-source"
 					>{quote.source}</span
 				>
 			</label>
 		{/if}
 		{#if quote.tags?.length}
 			<label class="quote-details">
-				<span class="bg-slate-900 rounded-none">Tags</span>
-				<span class="bg-transparent p-0 rounded-none" id="{quote.id}-tags">
+				<span class="bg-custom rounded-none">Tags</span>
+				<span class="quote-info p-0 rounded-none" id="{quote.id}-tags">
 					{#each quote.tags as tag}
 						<span class="rounded-sm bg-slate-700 mx-1 text-sky-500 p-1 ">{tag}</span>
 					{/each}
@@ -188,8 +205,8 @@
 		{/if}
 		{#if quote.context}
 			<label class="quote-details">
-				<span class="bg-slate-900 rounded-none">Context</span>
-				<span class="rounded-none    bg-slate-900 text-sky-500 " id="{quote.id}-context"
+				<span class="bg-custom rounded-none">Context</span>
+				<span class="quote-info rounded-none bg-custom text-sky-500 " id="{quote.id}-context"
 					>{quote.context}</span
 				>
 			</label>
@@ -203,6 +220,7 @@
 		grid-template-columns: 8ch auto;
 		width: 100%;
 		font-size: .75rem;
+		background: none;
 	}
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
