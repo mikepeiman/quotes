@@ -49,23 +49,21 @@
 
 	const injectInputFields = (quote_elements) => {
 		quote_elements.forEach((quote_element) => {
-			let w = quote_element.clientWidth;
-			let h = quote_element.clientHeight;
 			let inputEl = document.createElement('input');
-			// inputEl.classList.add('bg-red-500');
-			inputEl.style.width = `100%`;
-			inputEl.style.height = `${h + 8}px`;
 			inputEl.style.margin = `.5rem`;
 			inputEl.style.border = `none`;
-			inputEl.style.background = `transparent`;
-			inputEl.style.color = `white`;
+			inputEl.style.background = `none`;
+			inputEl.style.color = `var(--color-cyan-200)`;
 			inputEl.style.outline = `none`;
-			inputEl.style.borderBottom = `1px solid white`;
+			inputEl.style.borderBottom = `1px solid var(--color-cyan-200)`;
+			inputEl.style.fontSize = `1rem`;
+			inputEl.classList.add('quote-info')
+			inputEl.id = quote_element.id
 			inputEl.value = quote_element.innerText;
-
-			// quote_element.parentNode.insertBefore(inputEl, quote_element);
 			quote_element.parentNode.replaceChild(inputEl, quote_element);
-			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, w, h, quote_element);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, quote_element);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element.value`, quote_element.value);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element.id`, quote_element.id);
 			// quote_element.animate(
 			// 	{
 			// 		opacity: 0
@@ -79,10 +77,33 @@
 	};
 
 	const replaceQuoteDetails = (quote_elements) => {
-		console.log(
-			`🚀 ~ file: DisplayQuotes.svelte ~ line 74 ~ replaceQuoteDetails ~ quote_elements`,
-			quote_elements
-		);
+		quote_elements.forEach((quote_element) => {
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element`, quote_element);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.value`, quote_element.value);
+			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.id`, quote_element.id);
+			quote_element.id.includes('authorName') ? console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element`, quote_element.value) : null;
+			let spanEl = document.createElement('span');
+			spanEl.style.margin = `.5rem`;
+			spanEl.style.border = `none`;
+			spanEl.style.background = `none`;
+			spanEl.style.color = `var(--color-cyan-200)`;
+			spanEl.innerText = quote_element.value;
+			// spanEl.style.outline = `none`;
+			// spanEl.style.borderBottom = `1px solid var(--color-cyan-200)`;
+			spanEl.style.fontSize = `1rem`;
+			spanEl.classList.add('quote-info')
+			spanEl.value = quote_element.innerText;
+			quote_element.parentNode.replaceChild(spanEl, quote_element);
+			// quote_element.animate(
+			// 	{
+			// 		opacity: 0
+			// 	},
+			// 	{
+			// 		duration: 300,
+			// 		easing: 'ease-in-out'
+			// 	}
+			// );
+		});
 	};
 
 	const handleQuery = (i) => {
@@ -249,6 +270,7 @@
 		font-size: 0.75rem;
 		background: none;
 		align-items: center;
+
 	}
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
