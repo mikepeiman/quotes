@@ -10,15 +10,37 @@
 	import { onMount } from 'svelte';
 	import DisplayQuotes from './DisplayQuotes.svelte';
 	import { parse } from './parseQuotes.js';
-
+	import { v4 as uuidv4 } from 'uuid';
 	import { page } from '$app/stores';
-import AddQuoteForm from './add/AddQuoteForm.svelte';
+	import AddQuoteForm from './add/AddQuoteForm.svelte';
+	import { fade,  blur, fly, slide, scale, crossfade } from 'svelte/transition';
+	import { flip } from 'svelte/animate'; 
+	import { quintOut } from 'svelte/easing';
+
+	const [send, receive] = crossfade({
+		duration: d => Math.sqrt(d * 200),
+
+		fallback(node, params) {
+			const style = getComputedStyle(node);
+			const transform = style.transform === 'none' ? '' : style.transform;
+
+			return {
+				duration: 600,
+				easing: quintOut,
+				css: t => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`
+			};
+		}
+	});
 
 	export let filteredQuotes = [];
 
 	let addQuoteForm = false;
 	let input_file = [];
-	let contents = '', multiLineQuote = 0;
+	let contents = '',
+		multiLineQuote = 0;
 	let quotes = [];
 	let searchTerm = '';
 	let quotesArrays = [];
@@ -55,7 +77,7 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 		filteredQuotes = [...$addedQuotes, ...$quotesArray];
 		if (searchTerm) {
 			console.log(`🚀 ~ file: QuotesManager.svelte ~ line 80 ~ searchTerm TRUE`, searchTerm);
-		 filteredQuotes =	filteredQuotes.filter(
+			filteredQuotes = filteredQuotes.filter(
 				(quote) =>
 					quote.quoteBody.toLowerCase().includes(searchTerm.toLowerCase()) ||
 					quote.author.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -71,8 +93,11 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 
 		// dbQuotes = await getAllQuotesFromDB();
 		// quotesArray.set(dbQuotes.body.dgraph_quotes);
-        console.log(`🚀 ~ file: QuotesManager.svelte ~ line 74 ~ onMount ~ $quotesArray`, $quotesArray)
-		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ onMount ~ fsQuotesArray`, fsQuotesArray);
+		console.log(`🚀 ~ file: QuotesManager.svelte ~ line 74 ~ onMount ~ $quotesArray`, $quotesArray);
+		console.log(
+			`🚀 ~ file: QuotesManager.svelte ~ line 66 ~ onMount ~ fsQuotesArray`,
+			fsQuotesArray
+		);
 		// $quotesArray.forEach((quote) => {
 		// 	uploadQuote(quote, "addQuote")
 		// });
@@ -162,6 +187,7 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 			workingQuoteObject['tags'] = [];
 			workingQuoteObject['sources'] = [];
 			workingQuoteObject = parse(workingQuoteObject);
+			workingQuoteObject['id'] = uuidv4();
 			quotes = [...quotes, workingQuoteObject];
 		}
 		// }
@@ -274,7 +300,7 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 	<div class="flex w-full">
 		{#if $page.url.pathname !== '/'}
 			{#if addQuoteForm}
-			<AddQuoteForm />
+				<AddQuoteForm />
 			{:else}
 				<button class="p-4 rounded bg-indigo-600 m-3" on:click={showAddQuoteForm}
 					>Add New Quote</button
@@ -285,9 +311,14 @@ import AddQuoteForm from './add/AddQuoteForm.svelte';
 
 	<div class="quotes">
 		{#if filteredQuotes.length}
-			{#each filteredQuotes as quote, i}
+			{#each filteredQuotes as quote, i (i)}
 				{#if quote.quoteBody}
-					<DisplayQuotes {quote} {i} />
+					<!-- <div
+						in:receive={{ key: i }}
+						out:send={{ key: i }}
+						animate:flip={{ duration: 150 }} > -->
+						<DisplayQuotes quote={quote} i={i} />
+					<!-- </div> -->
 				{/if}
 			{/each}
 		{:else if $quotesArray.length || $addedQuotes.length}

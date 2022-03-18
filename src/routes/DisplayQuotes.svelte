@@ -4,6 +4,28 @@
 	import { page } from '$app/stores';
 	import { deleteQuote} from '$stores/quotes';
 	import DisplayQuotesEdit from './DisplayQuotesEdit.svelte';
+	import { fade,  blur, fly, slide, scale, crossfade } from 'svelte/transition';
+	import { flip } from 'svelte/animate'; 
+	import { quintOut } from 'svelte/easing';
+
+	const [send, receive] = crossfade({
+		duration: d => Math.sqrt(d * 200),
+
+		fallback(node, params) {
+			const style = getComputedStyle(node);
+			const transform = style.transform === 'none' ? '' : style.transform;
+
+			return {
+				duration: 600,
+				easing: quintOut,
+				css: t => `
+					transform: ${transform} scale(${t});
+					opacity: ${t}
+				`
+			};
+		}
+	});
+
 	let icons = {
 		edit: 'akar-icons:edit',
 		question: 'akar-icons:question',
@@ -84,14 +106,102 @@
 </script>
 
 {#if edit}
-<DisplayQuotesEdit {quote} {i} />
-{:else}
 <div
-	class="card quote p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
+	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
 >
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		{edit}
+		{#if $page.url.pathname !== '/'}
+			<div class="flex">
+				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
+					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
+					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'addQuote')}
+				>
+					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'upsertQuote')}
+				>
+					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
+					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1" />
+				</div>
+			</div>
+		{/if}
+	</div>
+	<h1 class="quote-body p-8 text-2xl">
+		<textarea class="quote-mark text-sky-300" bind:value={quote.quoteBody} />
+		<span class="quote-author text-sky-300"
+			>~ {quote.author?.name ? quote.author.name : quote.author}</span
+		>
+	</h1>
+	<div class="flex flex-col justify-items-start place-items-start">
+		<label class="input-group input-group-xs">
+			<input class="bg-slate-900" />Author
+			<span class="badge badge-success bg-slate-900 text-sky-300 input-xs"
+				>{quote.author.name ? quote.author.name : quote.author}</span
+			>
+		</label>
+		{#if quote.author.title}
+			<label class="input-group input-group-xs">
+				<input class="bg-slate-900" />Title
+				<span class="badge badge-success bg-slate-900 text-sky-400 input-xs"
+					>{quote.author.title}</span
+				>
+			</label>
+		{/if}
+		{#if quote.date}
+			<label class="input-group input-group-xs rounded-none">
+				<input class="bg-slate-900 rounded-none" />Date
+				<span class="rounded-none badge badge-info bg-slate-900 text-gray-400 input-xs"
+					>{quote.date}</span
+				>
+			</label>
+		{/if}
+		{#if quote.source}
+			<label class="input-group input-group-xs rounded-none">
+				<input class="bg-slate-900 rounded-none" />Source
+				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
+					>{quote.source}</span
+				>
+			</label>
+		{/if}
+		{#if quote.tags?.length}
+			<label class="input-group input-group-xs rounded-none">
+				<input class="bg-slate-900 rounded-none" />Tags
+				{#each quote.tags as tag}
+					<span
+						class="rounded-none badge badge-warning input-xs bg-slate-600 mx-1 text-sky-500 input-xs"
+						>{tag}</span
+					>
+				{/each}
+			</label>
+		{/if}
+		{#if quote.context}
+			<label class="input-group input-group-xs rounded-none">
+				<input class="bg-slate-900 rounded-none" />Context
+				<span class="rounded-none badge badge-warning input-xs bg-slate-900 text-sky-500 input-xs"
+					>{quote.context}</span
+				>
+			</label>
+		{/if}
+	</div>
+</div>
+{:else}
+<div
+transition:scale={{duration: 100, easing: quintOut}}
+	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
+>
+	<div class="flex justify-between">
+		<div class="count badge bg-gray-700">{i + 1}</div>
 		{#if $page.url.pathname !== '/'}
 			<div class="flex">
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
