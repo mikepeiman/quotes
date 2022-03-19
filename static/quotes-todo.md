@@ -12,6 +12,7 @@
 * add an "edit" action that converts any quote to an editable form, probably through DisplayQuotes component conditional rendering logic
 * add hover effect for quotes, show action icons only on hover
 * allow editing with single click on quote, or possibly single click activate styling, second click activate editing
+* need a distinct editing interface for tags, it seems. it should serve to make it quick and easy to add or remove tags
 
 ## Broad ideas
 

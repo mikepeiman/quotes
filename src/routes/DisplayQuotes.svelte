@@ -81,16 +81,20 @@
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element`, quote_element);
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.value`, quote_element.value);
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.id`, quote_element.id);
-			quote_element.id.includes('authorName') ? console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element`, quote_element.value) : null;
 			let spanEl = document.createElement('span');
-			spanEl.style.margin = `.5rem`;
+			spanEl.style.color = `var(--color-sky-200)`;
+			quote_element.id.includes('authorName') ? spanEl.style.color = `var(--color-sky-300)` : null;
+			quote_element.id.includes('authorTitle') ? spanEl.style.color = `var(--color-sky-400)` : null;
+			quote_element.id.includes('date') ? spanEl.style.color = `var(--color-slate-300)` : null;
+			quote_element.id.includes('source') ? spanEl.style.color = `var(--color-sky-500)` : null;
+			quote_element.id.includes('tags') ? spanEl.style.color = `var(--color-sky-600)` : null;
+			spanEl.style.margin = `0rem`;
 			spanEl.style.border = `none`;
 			spanEl.style.background = `none`;
-			spanEl.style.color = `var(--color-cyan-200)`;
 			spanEl.innerText = quote_element.value;
 			// spanEl.style.outline = `none`;
 			// spanEl.style.borderBottom = `1px solid var(--color-cyan-200)`;
-			spanEl.style.fontSize = `1rem`;
+			spanEl.style.fontSize = `.75rem`;
 			spanEl.classList.add('quote-info')
 			spanEl.value = quote_element.innerText;
 			quote_element.parentNode.replaceChild(spanEl, quote_element);
