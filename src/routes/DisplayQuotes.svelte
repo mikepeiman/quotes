@@ -31,7 +31,8 @@
 		question: 'akar-icons:question',
 		upload: 'ant-design:cloud-upload-outlined',
 		upsert: 'clarity:upload-outline-d',
-		delete: 'fluent:delete-dismiss-20-filled'
+		delete: 'fluent:delete-dismiss-20-filled',
+		star: 'clarity:star-solid',
 	};
 
 	let edit = false, hover = false
@@ -187,6 +188,11 @@
         console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 183 ~ hoverQuote ~ hoverOut`, i)
 		hover = false
 	}
+function favoriteQuote() {
+	'favorite' in quote ? quote.favorite = !quote.favorite : quote.favorite = true
+    console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 192 ~ favoriteQuote ~ favoriteQuote: `, quote.favorite)
+	quote.active = !quote.active
+}	
 </script>
 
 <div
@@ -196,7 +202,7 @@
 	on:mouseleave={hoverOut}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900 rounded-xl
 	hover:bg-gradient-to-br hover:border-sky-800 hover:from-electricpurple-900 transition-all hover:cursor-pointer
-	{quote.active ? 'border-orangeyellow-500 hover:border-orangeyellow-300' : 'border-gray-800'}"
+	{quote.active ? 'border-orangeyellow-500 hover:border-orangeyellow-300 from-electricpurple-900' : 'border-gray-800'}"
 	on:click={activateQuote}
 >
 
@@ -215,26 +221,32 @@
 					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 				<div
-					class="edit-quote hover:cursor-pointer"
-					on:click={() => uploadQuote(quote, 'addQuote')}
+				class="edit-quote hover:cursor-pointer"
+				on:click={() => uploadQuote(quote, 'addQuote')}
 				>
-					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
-					{hover ? 'opacity-100' : 'opacity-0'}
-					{quote.active ? 'opacity-100' : 'opacity-0'}" />
-				</div>
-				<div
-					class="edit-quote hover:cursor-pointer"
-					on:click={() => uploadQuote(quote, 'upsertQuote')}
-				>
-					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
-					{hover ? 'opacity-100' : 'opacity-0'}
-					{quote.active ? 'opacity-100' : 'opacity-0'}" />
-				</div>
-				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
-					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
-					{hover ? 'opacity-100' : 'opacity-0'}
-					{quote.active ? 'opacity-100' : 'opacity-0'}" />
-				</div>
+				<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+				{hover ? 'opacity-100' : 'opacity-0'}
+				{quote.active ? 'opacity-100' : 'opacity-0'}" />
+			</div>
+			<div
+			class="edit-quote hover:cursor-pointer"
+			on:click={() => uploadQuote(quote, 'upsertQuote')}
+			>
+			<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+			{hover ? 'opacity-100' : 'opacity-0'}
+			{quote.active ? 'opacity-100' : 'opacity-0'}" />
+		</div>
+		<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
+			<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+			{hover ? 'opacity-100' : 'opacity-0'}
+			{quote.active ? 'opacity-100' : 'opacity-0'}" />
+		</div>
+		<div class="edit-quote hover:cursor-pointer" on:click={favoriteQuote}>
+			<Icon icon={icons.star} class="w-8 h-8 ml-2 -mt-1  hover:text-yellow-400 transition-all 
+			{hover ? 'opacity-100' : 'opacity-0'}
+			{quote.active  || quote.favorite ? 'opacity-100' : 'opacity-0'}
+			{quote.favorite ? 'text-yellow-500' : ''}" />
+		</div>
 			</div>
 		{/if}
 
