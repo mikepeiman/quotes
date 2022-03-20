@@ -34,7 +34,7 @@
 		delete: 'fluent:delete-dismiss-20-filled'
 	};
 
-	let edit = false;
+	let edit = false, hover = false
 
 	const handleEdit = (i) => {
 		console.log(`edit ${i}`);
@@ -174,47 +174,60 @@
 
 	function activateQuote() {
         console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 176 ~ activateQuote ~ activateQuote`, quote.quoteBody)
-		quote.hasOwnProperty('active') ? true : quote.active = true
-		quote.active = !quote.active;
+		quote.hasOwnProperty('active') ? quote.active = !quote.active : quote.active = true
+		
         console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 179 ~ activateQuote ~ quote.active`, quote.active)
+	}
+
+	function hoverQuote() {
+        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 183 ~ hoverQuote ~ hoverQuote`, i)
+		hover = true
+	}
+	function hoverOut() {
+        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 183 ~ hoverQuote ~ hoverOut`, i)
+		hover = false
 	}
 </script>
 
 <div
 	id={quote.id}
 	transition:scale={{ duration: 100, easing: quintOut }}
+	on:mouseenter={hoverQuote}
+	on:mouseleave={hoverOut}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900 rounded-xl
 	hover:bg-gradient-to-br hover:border-sky-800 hover:from-electricpurple-900 transition-all hover:cursor-pointer
 	{quote.active ? 'border-orangeyellow-500 hover:border-orangeyellow-300' : 'border-gray-800'}"
 	on:click={activateQuote}
 >
+
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		{#if $page.url.pathname !== '/'}
+		{#if $page.url.pathname !== '/' && hover}
 			<div class="flex">
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
-					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1" />
+					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
 				</div>
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
-					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1" />
+					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
 				</div>
 				<div
 					class="edit-quote hover:cursor-pointer"
 					on:click={() => uploadQuote(quote, 'addQuote')}
 				>
-					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1" />
+					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
 				</div>
 				<div
 					class="edit-quote hover:cursor-pointer"
 					on:click={() => uploadQuote(quote, 'upsertQuote')}
 				>
-					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1" />
+					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
 				</div>
 				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
-					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1" />
+					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
 				</div>
 			</div>
 		{/if}
+
 	</div>
 
 	<h1 class="quote-body p-8 text-2xl">
