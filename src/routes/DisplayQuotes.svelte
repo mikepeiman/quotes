@@ -83,7 +83,7 @@
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.id`, quote_element.id);
 			let spanEl = document.createElement('span');
 			spanEl.style.color = `var(--color-sky-200)`;
-			quote_element.id.includes('authorName') ? spanEl.style.color = `var(--color-sky-300)` : null;
+			quote_element.id.includes('authorName') ? spanEl.style.color = `var(--color-sky-300)` : null;	
 			quote_element.id.includes('authorTitle') ? spanEl.style.color = `var(--color-sky-400)` : null;
 			quote_element.id.includes('date') ? spanEl.style.color = `var(--color-slate-300)` : null;
 			quote_element.id.includes('source') ? spanEl.style.color = `var(--color-sky-500)` : null;
@@ -171,12 +171,22 @@
 		console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ deleteQuote ~ quote, i`, quote, i);
 		deleteQuote(quote);
 	}
+
+	function activateQuote() {
+        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 176 ~ activateQuote ~ activateQuote`, quote.quoteBody)
+		quote.hasOwnProperty('active') ? true : quote.active = true
+		quote.active = !quote.active;
+        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 179 ~ activateQuote ~ quote.active`, quote.active)
+	}
 </script>
 
 <div
 	id={quote.id}
 	transition:scale={{ duration: 100, easing: quintOut }}
-	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900  rounded-xl"
+	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900 rounded-xl
+	hover:bg-gradient-to-br hover:border-sky-800 hover:from-electricpurple-900 transition-all hover:cursor-pointer
+	{quote.active ? 'border-orangeyellow-500 hover:border-orangeyellow-300' : 'border-gray-800'}"
+	on:click={activateQuote}
 >
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
