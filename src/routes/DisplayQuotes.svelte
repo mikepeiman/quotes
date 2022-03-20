@@ -202,28 +202,38 @@
 
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		{#if $page.url.pathname !== '/' && hover}
+		{#if $page.url.pathname !== '/'}
 			<div class="flex">
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
-					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
+					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					{hover ? 'opacity-100' : 'opacity-0'}
+					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
-					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
+					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					{hover ? 'opacity-100' : 'opacity-0'}
+					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 				<div
 					class="edit-quote hover:cursor-pointer"
 					on:click={() => uploadQuote(quote, 'addQuote')}
 				>
-					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
+					<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					{hover ? 'opacity-100' : 'opacity-0'}
+					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 				<div
 					class="edit-quote hover:cursor-pointer"
 					on:click={() => uploadQuote(quote, 'upsertQuote')}
 				>
-					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
+					<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					{hover ? 'opacity-100' : 'opacity-0'}
+					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
-					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all" />
+					<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					{hover ? 'opacity-100' : 'opacity-0'}
+					{quote.active ? 'opacity-100' : 'opacity-0'}" />
 				</div>
 			</div>
 		{/if}
