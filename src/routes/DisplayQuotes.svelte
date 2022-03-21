@@ -181,11 +181,9 @@
 	}
 
 	function hoverQuote() {
-        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 183 ~ hoverQuote ~ hoverQuote`, i)
 		hover = true
 	}
 	function hoverOut() {
-        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 183 ~ hoverQuote ~ hoverOut`, i)
 		hover = false
 	}
 function favoriteQuote() {
