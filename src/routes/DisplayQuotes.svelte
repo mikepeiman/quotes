@@ -32,10 +32,11 @@
 		upload: 'ant-design:cloud-upload-outlined',
 		upsert: 'clarity:upload-outline-d',
 		delete: 'fluent:delete-dismiss-20-filled',
-		star: 'clarity:star-solid',
+		star: 'clarity:star-solid'
 	};
 
-	let edit = false, hover = false
+	let edit = false,
+		hover = false;
 
 	const handleEdit = (i) => {
 		console.log(`edit ${i}`);
@@ -58,12 +59,15 @@
 			inputEl.style.outline = `none`;
 			inputEl.style.borderBottom = `1px solid var(--color-cyan-200)`;
 			inputEl.style.fontSize = `1rem`;
-			inputEl.classList.add('quote-info')
-			inputEl.id = quote_element.id
+			inputEl.classList.add('quote-info');
+			inputEl.id = quote_element.id;
 			inputEl.value = quote_element.innerText;
 			quote_element.parentNode.replaceChild(inputEl, quote_element);
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element`, quote_element);
-			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element.value`, quote_element.value);
+			console.log(
+				`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element.value`,
+				quote_element.value
+			);
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 6 ~ quote_element.id`, quote_element.id);
 			// quote_element.animate(
 			// 	{
@@ -80,15 +84,22 @@
 	const replaceQuoteDetails = (quote_elements) => {
 		quote_elements.forEach((quote_element) => {
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element`, quote_element);
-			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.value`, quote_element.value);
+			console.log(
+				`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.value`,
+				quote_element.value
+			);
 			console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 78 ~ quote_element.id`, quote_element.id);
 			let spanEl = document.createElement('span');
 			spanEl.style.color = `var(--color-sky-200)`;
-			quote_element.id.includes('authorName') ? spanEl.style.color = `var(--color-sky-300)` : null;	
-			quote_element.id.includes('authorTitle') ? spanEl.style.color = `var(--color-sky-400)` : null;
-			quote_element.id.includes('date') ? spanEl.style.color = `var(--color-slate-300)` : null;
-			quote_element.id.includes('source') ? spanEl.style.color = `var(--color-sky-500)` : null;
-			quote_element.id.includes('tags') ? spanEl.style.color = `var(--color-sky-600)` : null;
+			quote_element.id.includes('authorName')
+				? (spanEl.style.color = `var(--color-sky-300)`)
+				: null;
+			quote_element.id.includes('authorTitle')
+				? (spanEl.style.color = `var(--color-sky-400)`)
+				: null;
+			quote_element.id.includes('date') ? (spanEl.style.color = `var(--color-slate-300)`) : null;
+			quote_element.id.includes('source') ? (spanEl.style.color = `var(--color-sky-500)`) : null;
+			quote_element.id.includes('tags') ? (spanEl.style.color = `var(--color-sky-600)`) : null;
 			spanEl.style.margin = `0rem`;
 			spanEl.style.border = `none`;
 			spanEl.style.background = `none`;
@@ -96,7 +107,7 @@
 			// spanEl.style.outline = `none`;
 			// spanEl.style.borderBottom = `1px solid var(--color-cyan-200)`;
 			spanEl.style.fontSize = `.75rem`;
-			spanEl.classList.add('quote-info')
+			spanEl.classList.add('quote-info');
 			spanEl.value = quote_element.innerText;
 			quote_element.parentNode.replaceChild(spanEl, quote_element);
 			// quote_element.animate(
@@ -174,23 +185,32 @@
 	}
 
 	function activateQuote() {
-        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 176 ~ activateQuote ~ activateQuote`, quote.quoteBody)
-		quote.hasOwnProperty('active') ? quote.active = !quote.active : quote.active = true
-		
-        console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 179 ~ activateQuote ~ quote.active`, quote.active)
+		console.log(
+			`🚀 ~ file: DisplayQuotes.svelte ~ line 176 ~ activateQuote ~ activateQuote`,
+			quote.quoteBody
+		);
+		quote.hasOwnProperty('active') ? (quote.active = !quote.active) : (quote.active = true);
+
+		console.log(
+			`🚀 ~ file: DisplayQuotes.svelte ~ line 179 ~ activateQuote ~ quote.active`,
+			quote.active
+		);
 	}
 
 	function hoverQuote() {
-		hover = true
+		hover = true;
 	}
 	function hoverOut() {
-		hover = false
+		hover = false;
 	}
-function favoriteQuote() {
-	'favorite' in quote ? quote.favorite = !quote.favorite : quote.favorite = true
-    console.log(`🚀 ~ file: DisplayQuotes.svelte ~ line 192 ~ favoriteQuote ~ favoriteQuote: `, quote.favorite)
-	quote.active = !quote.active
-}	
+	function favoriteQuote() {
+		'favorite' in quote ? (quote.favorite = !quote.favorite) : (quote.favorite = true);
+		console.log(
+			`🚀 ~ file: DisplayQuotes.svelte ~ line 192 ~ favoriteQuote ~ favoriteQuote: `,
+			quote.favorite
+		);
+		quote.active = !quote.active;
+	}
 </script>
 
 <div
@@ -200,54 +220,72 @@ function favoriteQuote() {
 	on:mouseleave={hoverOut}
 	class="p-3 m-12 shadow-lg border border-2 border-gray-800 rounded-sm bg-gradient-to-br from-transparent via-gray-900 rounded-xl
 	hover:bg-gradient-to-br hover:border-sky-800 hover:from-electricpurple-900 transition-all hover:cursor-pointer
-	{quote.active ? 'border-orangeyellow-500 hover:border-orangeyellow-300 from-electricpurple-900' : 'border-gray-800'}"
+	{quote.active
+		? 'border-orangeyellow-500 hover:border-orangeyellow-300 from-electricpurple-900'
+		: 'border-gray-800'}"
 	on:click={activateQuote}
 >
-
 	<div class="flex justify-between">
 		<div class="count badge bg-gray-700">{i + 1}</div>
-		{#if $page.url.pathname !== '/'}
-			<div class="flex">
+		<div class="flex">
+				{#if $page.url.pathname !== '/'}
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleQuery(i)}>
-					<Icon icon={icons.question} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					<Icon
+						icon={icons.question}
+						class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
 					{hover ? 'opacity-100' : 'opacity-0'}
-					{quote.active ? 'opacity-100' : 'opacity-0'}" />
+					{quote.active ? 'opacity-100' : 'opacity-0'}"
+					/>
 				</div>
 				<div class="edit-quote hover:cursor-pointer" on:click={() => handleEdit(i)}>
-					<Icon icon={icons.edit} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					<Icon
+						icon={icons.edit}
+						class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
 					{hover ? 'opacity-100' : 'opacity-0'}
-					{quote.active ? 'opacity-100' : 'opacity-0'}" />
+					{quote.active ? 'opacity-100' : 'opacity-0'}"
+					/>
 				</div>
 				<div
-				class="edit-quote hover:cursor-pointer"
-				on:click={() => uploadQuote(quote, 'addQuote')}
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'addQuote')}
 				>
-				<Icon icon={icons.upload} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+					<Icon
+						icon={icons.upload}
+						class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
 				{hover ? 'opacity-100' : 'opacity-0'}
-				{quote.active ? 'opacity-100' : 'opacity-0'}" />
+				{quote.active ? 'opacity-100' : 'opacity-0'}"
+					/>
+				</div>
+				<div
+					class="edit-quote hover:cursor-pointer"
+					on:click={() => uploadQuote(quote, 'upsertQuote')}
+				>
+					<Icon
+						icon={icons.upsert}
+						class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+			{hover ? 'opacity-100' : 'opacity-0'}
+			{quote.active ? 'opacity-100' : 'opacity-0'}"
+					/>
+				</div>
+				<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
+					<Icon
+						icon={icons.delete}
+						class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
+			{hover ? 'opacity-100' : 'opacity-0'}
+			{quote.active ? 'opacity-100' : 'opacity-0'}"
+					/>
+				</div>
+				{/if}
+				<div class="edit-quote hover:cursor-pointer" on:click={favoriteQuote}>
+					<Icon
+						icon={icons.star}
+						class="w-8 h-8 ml-2 -mt-1  hover:text-yellow-400 transition-all 
+			{hover || quote.favorite ? 'opacity-100' : 'opacity-0'}
+			{quote.active || quote.favorite ? 'opacity-100' : ''}
+			{quote.favorite ? 'text-yellow-500 opacity-100' : ''}"
+					/>
+				</div>
 			</div>
-			<div
-			class="edit-quote hover:cursor-pointer"
-			on:click={() => uploadQuote(quote, 'upsertQuote')}
-			>
-			<Icon icon={icons.upsert} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
-			{hover ? 'opacity-100' : 'opacity-0'}
-			{quote.active ? 'opacity-100' : 'opacity-0'}" />
-		</div>
-		<div class="edit-quote hover:cursor-pointer" on:click={() => deleteQ(quote, 'local')}>
-			<Icon icon={icons.delete} class="w-8 h-8 ml-2 -mt-1 hover:text-sky-500 transition-all 
-			{hover ? 'opacity-100' : 'opacity-0'}
-			{quote.active ? 'opacity-100' : 'opacity-0'}" />
-		</div>
-		<div class="edit-quote hover:cursor-pointer" on:click={favoriteQuote}>
-			<Icon icon={icons.star} class="w-8 h-8 ml-2 -mt-1  hover:text-yellow-400 transition-all 
-			{hover ? 'opacity-100' : 'opacity-0'}
-			{quote.active  || quote.favorite ? 'opacity-100' : 'opacity-0'}
-			{quote.favorite ? 'text-yellow-500' : ''}" />
-		</div>
-			</div>
-		{/if}
-
 	</div>
 
 	<h1 class="quote-body p-8 text-2xl">
@@ -317,7 +355,6 @@ function favoriteQuote() {
 		font-size: 0.75rem;
 		background: none;
 		align-items: center;
-
 	}
 	// @import url('https://fonts.googleapis.com/css2?family=Allura&family=Bad+Script&family=Coda:wght@400;800&family=Dancing+Script&family=Forum&family=Gideon+Roman&family=Great+Vibes&family=Karla:ital,wght@0,200;0,300;1,200;1,300&family=Lemonada:wght@300;400;500&family=Lobster&family=Merriweather:ital,wght@0,300;1,300&family=Monoton&family=Montserrat:ital,wght@0,100;0,300;0,500;0,800;1,100;1,300;1,500;1,800&family=Outfit:wght@200;500&family=Overlock:ital,wght@0,400;0,700;1,400;1,700&family=Staatliches&display=swap');
 
